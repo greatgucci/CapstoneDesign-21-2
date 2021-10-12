@@ -33,7 +33,7 @@ color:rgb(255, 255, 255);</string>
      <string>녹화종료</string>
     </property>
    </widget>
-   <widget class="QLabel" name="cam">
+   <widget class="QLabel" name="view">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -46,7 +46,7 @@ color:rgb(255, 255, 255);</string>
      <string/>
     </property>
    </widget>
-   <zorder>cam</zorder>
+   <zorder>view</zorder>
    <zorder>endrecord</zorder>
   </widget>
  </widget>

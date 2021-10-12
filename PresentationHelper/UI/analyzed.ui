@@ -44,12 +44,12 @@ font: 36pt &quot;예스 고딕 레귤러&quot;;</string>
       <string>결과</string>
      </property>
     </widget>
-    <widget class="QLabel" name="analyzed">
+    <widget class="QLabel" name="video_result">
      <property name="geometry">
       <rect>
-       <x>420</x>
-       <y>250</y>
-       <width>721</width>
+       <x>90</x>
+       <y>260</y>
+       <width>691</width>
        <height>401</height>
       </rect>
      </property>
@@ -58,7 +58,7 @@ font: 36pt &quot;예스 고딕 레귤러&quot;;</string>
 color:rgb(255, 255, 255)</string>
      </property>
      <property name="text">
-      <string>분석내용</string>
+      <string>비디오 분석 내용</string>
      </property>
     </widget>
     <widget class="QPushButton" name="towelcome">
@@ -97,6 +97,23 @@ color:rgb(255, 255, 255);</string>
      </property>
      <property name="text">
       <string>다시보기</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="sound_result">
+     <property name="geometry">
+      <rect>
+       <x>860</x>
+       <y>260</y>
+       <width>691</width>
+       <height>401</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 16pt &quot;예스 고딕 레귤러&quot;;
+color:rgb(255, 255, 255)</string>
+     </property>
+     <property name="text">
+      <string>목소리 분석 내용</string>
      </property>
     </widget>
    </widget>

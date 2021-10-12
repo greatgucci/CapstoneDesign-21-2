@@ -7,11 +7,11 @@ class WelcomeScreen(QMainWindow):
         super(WelcomeScreen, self).__init__()
         loadUi("UI/welcome.ui", self)
         self.controller = controller
-        self.record.clicked.connect(self.gotorecord)
+        self.record.clicked.connect(self.goto_record)
 
     # 화면 넘어왔을때 호출되는 함수
     def onload(self):
         print("WelcomeSceneLoaded")
 
-    def gotorecord(self):
+    def goto_record(self):
         self.controller.setScreen(1)
