@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1600</width>
+    <height>900</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="widget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1600</width>
+      <height>900</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QWidget#widget{
+background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(217, 75, 154, 255), stop:1 rgba(219, 255, 174, 255))}</string>
+    </property>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>770</x>
+       <y>80</y>
+       <width>111</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color:rgb(255, 255, 255);
+font: 36pt &quot;예스 고딕 레귤러&quot;;</string>
+     </property>
+     <property name="text">
+      <string>결과</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="analyzed">
+     <property name="geometry">
+      <rect>
+       <x>420</x>
+       <y>250</y>
+       <width>721</width>
+       <height>401</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 16pt &quot;예스 고딕 레귤러&quot;;
+color:rgb(255, 255, 255)</string>
+     </property>
+     <property name="text">
+      <string>분석내용</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="towelcome">
+     <property name="geometry">
+      <rect>
+       <x>1380</x>
+       <y>750</y>
+       <width>141</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-radius:60px;
+background-color:rgb(217, 140, 121);
+font: 16pt &quot;예스 고딕 레귤러&quot;;
+color:rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>시작화면으로</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="rewatch">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>740</y>
+       <width>141</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-radius:60px;
+background-color:rgb(217, 140, 121);
+font: 16pt &quot;예스 고딕 레귤러&quot;;
+color:rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>다시보기</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
