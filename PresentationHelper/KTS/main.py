@@ -2,6 +2,8 @@ import sys
 import os
 from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QApplication
+
+from KTS.RewatchScreen import RewatchScreen
 from KTS.WelcomeScreen import WelcomeScreen
 from KTS.RecordScreen import RecordScreen
 from KTS.AnalyzedScreen import AnalyzedScreen
@@ -14,11 +16,10 @@ class Controller:
 
     def __init__(self, mainwidget):
         self.mainWidget = mainwidget
-        self.widgetList = [WelcomeScreen(self), RecordScreen(self), AnalyzingScreen(self), AnalyzedScreen(self)]
-        mainwidget.addWidget(self.widgetList[0])
-        mainwidget.addWidget(self.widgetList[1])
-        mainwidget.addWidget(self.widgetList[2])
-        mainwidget.addWidget(self.widgetList[3])
+        self.widgetList = [WelcomeScreen(self), RecordScreen(self), AnalyzingScreen(self),
+                           AnalyzedScreen(self), RewatchScreen(self)]
+        for i in range(len(self.widgetList)):
+            mainwidget.addWidget(self.widgetList[i])
         mainwidget.setFixedHeight(900)
         mainwidget.setFixedWidth(1600)
         mainwidget.show()

@@ -27,12 +27,12 @@
      <string notr="true">QWidget#widget{
 background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(217, 75, 154, 255), stop:1 rgba(219, 255, 174, 255))}</string>
     </property>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="title">
      <property name="geometry">
       <rect>
-       <x>770</x>
-       <y>80</y>
-       <width>111</width>
+       <x>730</x>
+       <y>40</y>
+       <width>201</width>
        <height>101</height>
       </rect>
      </property>
@@ -41,16 +41,16 @@ background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba
 font: 36pt &quot;예스 고딕 레귤러&quot;;</string>
      </property>
      <property name="text">
-      <string>결과</string>
+      <string>분석 결과</string>
      </property>
     </widget>
     <widget class="QLabel" name="video_result">
      <property name="geometry">
       <rect>
-       <x>90</x>
-       <y>260</y>
-       <width>691</width>
-       <height>401</height>
+       <x>210</x>
+       <y>400</y>
+       <width>511</width>
+       <height>281</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -60,8 +60,11 @@ color:rgb(255, 255, 255)</string>
      <property name="text">
       <string>비디오 분석 내용</string>
      </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
     </widget>
-    <widget class="QPushButton" name="towelcome">
+    <widget class="QPushButton" name="to_welcome">
      <property name="geometry">
       <rect>
        <x>1380</x>
@@ -80,7 +83,7 @@ color:rgb(255, 255, 255);</string>
       <string>시작화면으로</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="rewatch">
+    <widget class="QPushButton" name="to_rewatch">
      <property name="geometry">
       <rect>
        <x>90</x>
@@ -99,13 +102,47 @@ color:rgb(255, 255, 255);</string>
       <string>다시보기</string>
      </property>
     </widget>
-    <widget class="QLabel" name="sound_result">
+    <widget class="QLabel" name="title_video">
      <property name="geometry">
       <rect>
-       <x>860</x>
-       <y>260</y>
-       <width>691</width>
-       <height>401</height>
+       <x>410</x>
+       <y>180</y>
+       <width>101</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color:rgb(255, 255, 255);
+font: 36pt &quot;예스 고딕 레귤러&quot;;</string>
+     </property>
+     <property name="text">
+      <string>표정</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="title_audio">
+     <property name="geometry">
+      <rect>
+       <x>1080</x>
+       <y>180</y>
+       <width>141</width>
+       <height>101</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color:rgb(255, 255, 255);
+font: 36pt &quot;예스 고딕 레귤러&quot;;</string>
+     </property>
+     <property name="text">
+      <string>목소리</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="video_suggestion">
+     <property name="geometry">
+      <rect>
+       <x>290</x>
+       <y>280</y>
+       <width>341</width>
+       <height>91</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -113,7 +150,50 @@ color:rgb(255, 255, 255);</string>
 color:rgb(255, 255, 255)</string>
      </property>
      <property name="text">
-      <string>목소리 분석 내용</string>
+      <string>좀 더 웃으시면 좋겠네요!</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="audio_suggestion">
+     <property name="geometry">
+      <rect>
+       <x>970</x>
+       <y>280</y>
+       <width>341</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 16pt &quot;예스 고딕 레귤러&quot;;
+color:rgb(255, 255, 255)</string>
+     </property>
+     <property name="text">
+      <string>좀 더 침착하게!</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="audio_result">
+     <property name="geometry">
+      <rect>
+       <x>880</x>
+       <y>400</y>
+       <width>511</width>
+       <height>281</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 16pt &quot;예스 고딕 레귤러&quot;;
+color:rgb(255, 255, 255)</string>
+     </property>
+     <property name="text">
+      <string>오디오 분석 내용</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
      </property>
     </widget>
    </widget>

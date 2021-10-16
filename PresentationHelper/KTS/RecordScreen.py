@@ -1,3 +1,4 @@
+import sys
 import time
 
 import cv2
@@ -56,7 +57,6 @@ class VideoView:
 
 # 영상 촬영, 저장을 위한 스레드가 따로 동작
 class VideoStream:
-    img = [0]
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     cam_w = 1280
     cam_h = 720
@@ -86,4 +86,3 @@ class VideoStream:
         self.stopped = True
         self.camera.release()
         self.out.release()
-
