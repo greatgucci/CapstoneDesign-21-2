@@ -22,18 +22,20 @@ class AnalyzedScreen(QMainWindow):
 
     def print_video_data(self, video_data):
         total = [0]*len(FaceData.emotion_types)
-        text = "평균값\n "
+        text = "캡쳐된 표정수 : "+str(len(video_data)) + "\n\n"
+        text += "평균값\n"
 
         for i in range(len(video_data)):
             for j in range(len(FaceData.emotion_types)):
                 total[j] += video_data[i].emotions[j]
 
         for i in range(len(FaceData.emotion_types)):
-            result = round(total[i] / len(video_data), 3)
-            text += FaceData.emotion_types[i] + ":" + str(result) + "\n "
+            result = int(total[i] / len(video_data) * 100)
+            text += FaceData.emotion_types[i] + " : " + str(result) + "%\n"
 
         self.video_suggestion.setText("좀 더 웃으시면 좋겠네요!")
         self.video_result.setText(text)
+        self.video_result.update()
 
 
     def goto_welcome(self):

@@ -36,16 +36,15 @@ class VideoAnalyzer:
         face_detection = cv2.CascadeClassifier('files/haarcascade_frontalface_default.xml')
         emotion_classifier = keras.models.load_model('files/emotion_model.hdf5', False)
         cap = cv2.VideoCapture('Output/video.mp4')
-        fps = cap.get(cv2.CAP_PROP_FPS);
         self.face_data_list = []
-        fpsCount = 0;
+        frame_cnt = 0
 
         while cap.isOpened():
             ret, frame = cap.read()
             if ret:
-                fpsCount += 1;
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 faces = face_detection.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+                frame_cnt += 1
                 if len(faces) > 0:
                     # For the largest image
                     face = sorted(faces, reverse=True, key=lambda x: (x[2] - x[0]) * (x[3] - x[1]))[0]
@@ -58,8 +57,7 @@ class VideoAnalyzer:
                     roi = np.expand_dims(roi, axis=0)
                     # Emotion predict
                     preds = emotion_classifier.predict(roi)[0]
-                    time = fpsCount/fps
-                    self.face_data_list.append(FaceData(time, preds))
+                    self.face_data_list.append(FaceData(frame_cnt, preds))
             else:
                 cap.release()
                 break
@@ -71,6 +69,6 @@ class VideoAnalyzer:
 class FaceData:
     emotion_types = ["화남", "역겨움", "공포", "행복", "슬픔", "놀람", "안정됨"]
 
-    def __init__(self, time, emotions):
-        self.time = time
+    def __init__(self, frame, emotions):
+        self.frame = frame
         self.emotions = emotions
