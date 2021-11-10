@@ -27,19 +27,6 @@
      <string/>
     </property>
    </widget>
-   <widget class="QSlider" name="slider">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>810</y>
-      <width>1491</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-   </widget>
    <widget class="QLabel" name="video_data">
     <property name="geometry">
      <rect>

@@ -1,3 +1,5 @@
+import time
+
 import cv2
 import keras.models
 import numpy as np
@@ -11,6 +13,7 @@ import librosa
 import base64
 import urllib3
 import json
+import threading
 from pydub import AudioSegment
 
 
@@ -33,11 +36,20 @@ class AnalyzingScreen(QMainWindow):
     def onload(self):
         print("AnalyzingSceneLoaded")
         # delay analyze start
-        threading.Timer(self.delay, self.start_analyze).start()
+        time.sleep(self.delay)
+        self.start_analyze()
 
     def start_analyze(self):
-        self.controller.video_analyze_data = VideoAnalyzer().getData()
-        self.controller.sound_analyze_data = AudioAnalyzer().getData()
+        #분석 속도 개선을 위해 thread 분리
+        self.audioAnalyzer = AudioAnalyzer()
+        self.videoAnalyzer = VideoAnalyzer()
+
+        while self.audioAnalyzer.isAnalyzing:
+            pass
+
+        self.controller.video_analyze_data = self.videoAnalyzer.getData()
+        self.controller.sound_analyze_data = self.audioAnalyzer.getData()
+
         self.goto_analyzed()
 
     def goto_analyzed(self):
@@ -45,10 +57,16 @@ class AnalyzingScreen(QMainWindow):
 
 class VideoAnalyzer:
     def __init__(self):
+        self.isAnalyzing = True
+        self.face_data_list = []
+        self.analyze()
+
+    def analyze(self):
+        print("video analyze start\n")
         face_detection = cv2.CascadeClassifier('files/haarcascade_frontalface_default.xml')
         emotion_classifier = keras.models.load_model('files/emotion_model.hdf5', False)
         cap = cv2.VideoCapture('Output/video.mp4')
-        self.face_data_list = []
+
         frame_cnt = 0
 
         while cap.isOpened():
@@ -56,7 +74,6 @@ class VideoAnalyzer:
             if ret:
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 faces = face_detection.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-                frame_cnt += 1
                 if len(faces) > 0:
                     # For the largest image
                     face = sorted(faces, reverse=True, key=lambda x: (x[2] - x[0]) * (x[3] - x[1]))[0]
@@ -70,9 +87,13 @@ class VideoAnalyzer:
                     # Emotion predict
                     preds = emotion_classifier.predict(roi)[0]
                     self.face_data_list.append(FaceData(frame_cnt, preds))
+                frame_cnt += 10
+                cap.set(cv2.CAP_PROP_POS_FRAMES, frame_cnt)
             else:
                 cap.release()
                 break
+        print("video analyze end\n")
+        self.isAnalyzing = False
 
     def getData(self):
         return self.face_data_list
@@ -87,14 +108,23 @@ class FaceData:
 class AudioAnalyzer:
 
     def __init__(self):
-        from RecordScreen import decibels
+        self.isAnalyzing = True
         self.data = []
+        self.thread = threading.Thread(target=self.analyzeAudio, args=())
+        self.thread.start()
+
+    def analyzeAudio(self):
+
+        from RecordScreen import decibels
+        print("audio analyze start\n")
         # decibels를 data에 저장
         self.data.append(decibels)
         # tempo_analysis 결과 data에 저장
         self.data.append(self.tempo_analysis())
         # get_subscription 결과 data에 저장
         self.data.append(self.get_subscription())
+        print("audio analyze end\n")
+        self.isAnalyzing = False
 
     # todo : 최주연님, 녹화된 음성 분석
     # 빠르기 분석

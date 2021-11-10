@@ -28,20 +28,26 @@ class RewatchScreen(QMainWindow):
     # 화면 넘어왔을때 호출되는 함수
     def onload(self):
         print("RewatchScreen Loaded")
-        AudioView()
-        VideoView(self.view, self.video_data, self.controller.video_analyze_data)
-        #Play Audio Thread
-        self.draw_text()
+        self.streaming = 0
+        self.video = VideoView(self.view, self.video_data, self.controller.video_analyze_data)
+        self.audio = AudioView()
+        self.thread = Thread(target=self.stream_check_thread, args=())
+        self.thread.start()
 
-    def draw_text(self):
-        # todo : draw analyzed face data
-        # todo : draw audio data
-        return
+
+    def stream_check_thread(self):
+        while self.video.isPlay or self.audio.isPlay:
+            pass
+        self.controller.setScreen(0)
+
+
 
 #오디오 출력 스레드
 class AudioView:
+
     def __init__(self):
         from RecordScreen import PATH, CHUNK
+        self.isPlay = True
 
         self.open = True
         self.p = pyaudio.PyAudio()
@@ -69,15 +75,17 @@ class AudioView:
         self.stream.close()
 
         self.p.terminate()
+        self.isPlay = False
 
 
 #영상 출력 스레드
 class VideoView:
     screen_w = 1600
     screen_h = 900
-    stopped = False
+    offset = 0.0035
 
     def __init__(self, view_video, view_text, face_data):
+        self.isPlay = True
         self.view_video = view_video
         self.view_text = view_text
         self.face_data = face_data
@@ -115,12 +123,14 @@ class VideoView:
                     face_data_index += 1
 
                 #wait
-                wait_time = interval - (time.time() - time_start)
+                wait_time = interval - (time.time() - time_start) - self.offset
                 if wait_time > 0:
                     time.sleep(wait_time)
             else:
                 cap.release()
                 break
+
+        self.isPlay = False
     
 
 

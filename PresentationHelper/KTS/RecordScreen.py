@@ -3,6 +3,7 @@ import threading
 import time
 
 import cv2
+import numpy as np
 from PyQt5.QtGui import QPixmap
 from threading import Thread
 from PyQt5.uic import loadUi
@@ -14,9 +15,13 @@ import pyaudio
 import audioop
 import wave
 import math
+import keras.models
+import datetime
 from logging import log
 
 ## 오디오 녹음에 필요한 상수
+from keras_preprocessing.image import img_to_array
+
 CHUNK = 512
 # 16bit는 각 샘플의 크기
 FORMAT = pyaudio.paInt16
@@ -76,7 +81,7 @@ class GraphicView:
         self.viewThread.start()
 
     def drawEvent(self):
-        start = time.process_time()
+        start = time.time()
         while not self.stopped:
             img = cv2.cvtColor(self.window.video.read(), cv2.COLOR_BGR2RGB)
             qt_img = QtGui.QImage(img, img.shape[1], img.shape[0], QtGui.QImage.Format_RGB888)
@@ -84,7 +89,7 @@ class GraphicView:
             self.window.graphic.setPixmap(pxm.scaled(self.screen_w, self.screen_h))
             self.window.graphic.update()
 
-            self.currentTime = time.process_time() - start
+            self.currentTime = time.time() - start
             self.window.time.setText("시간 : "+str(int(self.currentTime)))
             self.window.time.update()
             time.sleep(self.drawInterval)
@@ -113,6 +118,7 @@ class AudioStream:
                         rate=self.RATE,
                         input=True,
                         frames_per_buffer=self.CHUNK)
+        self.stream.start_stream()
 
     def start(self):
         self.thread = threading.Thread(target=self.record)
@@ -120,8 +126,6 @@ class AudioStream:
 
     def record(self):
         print("녹음을 시작합니다")
-        self.stream.start_stream()
-        
         for i in range(0, int(self.RATE / self.CHUNK * record_seconds)):
             data = self.stream.read(CHUNK)
             self.frames.append(data)
