@@ -17,7 +17,8 @@ from pydub import AudioSegment
 ## 전역 변수
 openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/Recognition"
 accessKey = "62dbdbd8-e605-4035-a608-fb4563c92888"
-audioFilePath = "src/output.wav"
+# 수정
+# audioFilePath = "src/output.wav"
 languageCode = "korean"
 
 splited_wavefile = []

@@ -28,16 +28,48 @@ class RewatchScreen(QMainWindow):
     # 화면 넘어왔을때 호출되는 함수
     def onload(self):
         print("RewatchScreen Loaded")
+        AudioView()
         VideoView(self.view, self.video_data, self.controller.video_analyze_data)
         #Play Audio Thread
         self.draw_text()
-
-
 
     def draw_text(self):
         # todo : draw analyzed face data
         # todo : draw audio data
         return
+
+#오디오 출력 스레드
+class AudioView:
+    def __init__(self):
+        from RecordScreen import PATH, CHUNK
+
+        self.open = True
+        self.p = pyaudio.PyAudio()
+        self.CHUNK = CHUNK
+        self.PATH = PATH
+
+        self.wf = wave.open(self.PATH, 'rb')
+
+        self.stream = self.p.open(format=self.p.get_format_from_width(self.wf.getsampwidth()),
+                        channels=self.wf.getnchannels(),
+                        rate=self.wf.getframerate(),
+                        output=True)
+
+        self.viewThread = Thread(target=self.play, args=())
+        self.viewThread.start()
+
+    def play(self):
+        data = self.wf.readframes(self.CHUNK)
+
+        while data != b'':
+            self.stream.write(data)
+            data = self.wf.readframes(self.CHUNK)
+
+        self.stream.stop_stream()
+        self.stream.close()
+
+        self.p.terminate()
+
 
 #영상 출력 스레드
 class VideoView:
@@ -89,30 +121,7 @@ class VideoView:
             else:
                 cap.release()
                 break
-    # to do : 최주연        
-    # 녹음파일 재생
-    def play_audio():
-        from RecordScreen import PATH, CHUNK
-        
-        wf = wave.open(PATH, 'rb')
-
-        p = pyaudio.PyAudio()
-
-        stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
-                        channels=wf.getnchannels(),
-                        rate=wf.getframerate(),
-                        output=True)
-
-        data = wf.readframes(CHUNK)
-
-        while data != b'':
-            stream.write(data)
-            data = wf.readframes(CHUNK)
-
-        stream.stop_stream()
-        stream.close()
-
-        p.terminate()
+    
 
 
 

@@ -107,7 +107,7 @@ class AudioStream:
 
     def record(self):
         print("녹음을 시작합니다")
-        # self.stream.start_stream()
+        self.stream.start_stream()
         
         for i in range(0, int(self.RATE / self.CHUNK * record_seconds)):
             data = self.stream.read(CHUNK)
