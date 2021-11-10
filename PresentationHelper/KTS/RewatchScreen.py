@@ -22,7 +22,7 @@ class RewatchScreen(QMainWindow):
 
     def __init__(self, controller):
         super(RewatchScreen, self).__init__()
-        loadUi("../UI/rewatch.ui", self)
+        loadUi("UI/rewatch.ui", self)
         self.controller = controller
 
     # 화면 넘어왔을때 호출되는 함수
