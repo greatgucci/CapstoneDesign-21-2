@@ -5,13 +5,16 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMainWindow
 from threading import Thread
 from PyQt5 import QtGui
-from KTS.AnalyzingScreen import FaceData
+from AnalyzingScreen import FaceData
+
+## 오디오 리플레이
+import pyaudio
+import wave
 
 #UI
 #texts : audio_data , video_data
 #screen : view
 #slider : slider
-
 
 class RewatchScreen(QMainWindow):
     screen_w = 1600
@@ -19,7 +22,7 @@ class RewatchScreen(QMainWindow):
 
     def __init__(self, controller):
         super(RewatchScreen, self).__init__()
-        loadUi("UI/rewatch.ui", self)
+        loadUi("../UI/rewatch.ui", self)
         self.controller = controller
 
     # 화면 넘어왔을때 호출되는 함수
@@ -86,6 +89,30 @@ class VideoView:
             else:
                 cap.release()
                 break
+    # to do : 최주연        
+    # 녹음파일 재생
+    def play_audio():
+        from RecordScreen import PATH, CHUNK
+        
+        wf = wave.open(PATH, 'rb')
+
+        p = pyaudio.PyAudio()
+
+        stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
+                        channels=wf.getnchannels(),
+                        rate=wf.getframerate(),
+                        output=True)
+
+        data = wf.readframes(CHUNK)
+
+        while data != b'':
+            stream.write(data)
+            data = wf.readframes(CHUNK)
+
+        stream.stop_stream()
+        stream.close()
+
+        p.terminate()
 
 
 

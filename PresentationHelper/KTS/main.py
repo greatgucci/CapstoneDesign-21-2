@@ -3,12 +3,13 @@ import os
 from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QApplication
 
-from KTS.RewatchScreen import RewatchScreen
-from KTS.WelcomeScreen import WelcomeScreen
-from KTS.RecordScreen import RecordScreen
-from KTS.AnalyzedScreen import AnalyzedScreen
-from KTS.AnalyzingScreen import AnalyzingScreen
+from RewatchScreen import RewatchScreen
+from WelcomeScreen import WelcomeScreen
+from RecordScreen import RecordScreen
+from AnalyzingScreen import AnalyzingScreen
+from AnalyzedScreen import AnalyzedScreen
 
+import pyaudio
 
 class Controller:
     video_analyze_data = []
@@ -18,6 +19,7 @@ class Controller:
         self.mainWidget = mainwidget
         self.widgetList = [WelcomeScreen(self), RecordScreen(self), AnalyzingScreen(self),
                            AnalyzedScreen(self), RewatchScreen(self)]
+
         for i in range(len(self.widgetList)):
             mainwidget.addWidget(self.widgetList[i])
         mainwidget.setFixedHeight(900)
@@ -32,6 +34,7 @@ class Controller:
 
 
 # main
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'   # tensorflow error 메시지 제외하고 무시
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # tensorflow cpu 사용
 app = QApplication(sys.argv)
