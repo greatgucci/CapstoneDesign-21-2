@@ -14,26 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="endrecord">
-    <property name="geometry">
-     <rect>
-      <x>750</x>
-      <y>700</y>
-      <width>141</width>
-      <height>121</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border-radius:60px;
-background-color:rgb(217, 140, 121);
-font: 16pt &quot;예스 고딕 레귤러&quot;;
-color:rgb(255, 255, 255);</string>
-    </property>
-    <property name="text">
-     <string>녹화종료</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="view">
+   <widget class="QLabel" name="graphic">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -46,8 +27,23 @@ color:rgb(255, 255, 255);</string>
      <string/>
     </property>
    </widget>
-   <zorder>view</zorder>
-   <zorder>endrecord</zorder>
+   <widget class="QLabel" name="time">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>261</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:rgb(255, 255, 255);
+font: 36pt &quot;예스 고딕 레귤러&quot;;</string>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;발표 시간 : 10&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <resources/>

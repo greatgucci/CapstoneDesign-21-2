@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1600</width>
-    <height>900</height>
+    <width>1594</width>
+    <height>898</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -116,7 +116,7 @@ color:rgb(255, 255, 255);</string>
 font: 36pt &quot;예스 고딕 레귤러&quot;;</string>
      </property>
      <property name="text">
-      <string>표정</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:24pt;&quot;&gt;목소리&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QLabel" name="title_audio">
@@ -133,7 +133,7 @@ font: 36pt &quot;예스 고딕 레귤러&quot;;</string>
 font: 36pt &quot;예스 고딕 레귤러&quot;;</string>
      </property>
      <property name="text">
-      <string>목소리</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:24pt;&quot;&gt;목소리&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QLabel" name="video_suggestion">

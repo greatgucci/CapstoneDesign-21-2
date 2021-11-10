@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QMainWindow
 class WelcomeScreen(QMainWindow):
     def __init__(self, controller):
         super(WelcomeScreen, self).__init__()
-        loadUi("../UI/welcome.ui", self)
+        loadUi("UI/welcome.ui", self)
         self.controller = controller
         self.record.clicked.connect(self.goto_record)
 

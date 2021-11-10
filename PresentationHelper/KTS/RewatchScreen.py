@@ -22,7 +22,7 @@ class RewatchScreen(QMainWindow):
 
     def __init__(self, controller):
         super(RewatchScreen, self).__init__()
-        loadUi("../UI/rewatch.ui", self)
+        loadUi("UI/rewatch.ui", self)
         self.controller = controller
 
     # 화면 넘어왔을때 호출되는 함수
@@ -91,7 +91,7 @@ class VideoView:
                 break
     # to do : 최주연        
     # 녹음파일 재생
-    def play_audio():
+    def play_audio(self):
         from RecordScreen import PATH, CHUNK
         
         wf = wave.open(PATH, 'rb')

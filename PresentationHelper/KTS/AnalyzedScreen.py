@@ -9,7 +9,7 @@ class AnalyzedScreen(QMainWindow):
 
     def __init__(self, controller):
         super(AnalyzedScreen, self).__init__()
-        loadUi("../UI/analyzed.ui", self)
+        loadUi("UI/analyzed.ui", self)
         self.controller = controller
         self.to_welcome.clicked.connect(self.goto_welcome)
         self.to_rewatch.clicked.connect(self.goto_rewatch)
@@ -18,6 +18,7 @@ class AnalyzedScreen(QMainWindow):
     def onload(self):
         print("AnalyzeSceneLoaded")
         self.print_video_data(self.controller.video_analyze_data)
+        self.print_audio_data(self.controller.sound_analyze_data)
         # todo : 영상 분석한 결과 출력
 
     def print_video_data(self, video_data):
@@ -38,25 +39,24 @@ class AnalyzedScreen(QMainWindow):
         self.video_result.update()
 
     # 분석 결과 유저에게 전달하는 함수
-    def print_audio_data(self):
-        
-        ## 오디오 분석 결과 출력
-        from main import sound_analyze_data
-
+    def print_audio_data(self, sound_data):
         volume_text = '볼륨(dB): '
-        for i in range(len(sound_analyze_data[0])):
-            volume_text += str(round(sound_analyze_data[0][i], 1))+'초'
+        for i in range(len(sound_data[0])):
+            volume_text += str(round(sound_data[0][i], 1))+'초'
+        volume_text += '\n'
+
         tempo_text = '빠르기(tempo): '
-        for j in range(len(sound_analyze_data[1])):
-            tempo_text += str(round(sound_analyze_data[1][j], 1))+'초'
+        for j in range(len(sound_data[1])):
+            tempo_text += str(round(sound_data[1][j], 1))+'초'
+        tempo_text += '\n'
+
         sub_text = '음성 인식: '
-        for k in range(len(sound_analyze_data[2])):
-            sub_text += sound_analyze_data[2][k]
+        for k in range(len(sound_data[2])):
+            sub_text += sound_data[2][k]
+        sub_text += '\n'
 
         self.audio_suggestion.setText("좀 더 차분하게 말하시면 좋겠네요!")
-        self.audio_result.setText(volume_text)
-        self.audio_result.setText(tempo_text)
-        self.audio_result.setText(sub_text)
+        self.audio_result.setText(volume_text+tempo_text+sub_text)
         self.audio_result.update()
 
     def goto_welcome(self):
