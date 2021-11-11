@@ -3,9 +3,7 @@ import time
 import cv2
 import keras.models
 import numpy as np
-import threading
 from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QMainWindow
 from keras.preprocessing.image import img_to_array
 
 ## 오디오 분석
@@ -14,13 +12,14 @@ import base64
 import urllib3
 import json
 import threading
+from PyQt5.QtWidgets import QMainWindow
+from Path import Path
 from pydub import AudioSegment
 
 
 ## 전역 변수
 openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/Recognition"
 accessKey = "62dbdbd8-e605-4035-a608-fb4563c92888"
-audioFilePath = "Output/output.wav"
 languageCode = "korean"
 
 splited_wavefile = []
@@ -29,7 +28,7 @@ class AnalyzingScreen(QMainWindow):
     delay = 0.125
     def __init__(self, controller):
         super(AnalyzingScreen, self).__init__()
-        loadUi("UI/analyzing.ui", self)
+        loadUi(Path.path_AnalyzingScreen(), self)
         self.controller = controller
 
     # 화면 넘어왔을때 호출되는 함수
@@ -63,9 +62,9 @@ class VideoAnalyzer:
 
     def analyze(self):
         print("video analyze start\n")
-        face_detection = cv2.CascadeClassifier('files/haarcascade_frontalface_default.xml')
-        emotion_classifier = keras.models.load_model('files/emotion_model.hdf5', False)
-        cap = cv2.VideoCapture('Output/video.mp4')
+        face_detection = cv2.CascadeClassifier(Path.path_Haarcascarde())
+        emotion_classifier = keras.models.load_model(Path.path_EmotionModel(), False)
+        cap = cv2.VideoCapture(Path.path_VideoOutput())
 
         frame_cnt = 0
 
@@ -130,7 +129,7 @@ class AudioAnalyzer:
     # 빠르기 분석
     def tempo_analysis(self):
 
-        from RecordScreen import DURATION, PER, PATH, record_seconds
+        from RecordScreen import DURATION, PER, record_seconds
 
         tempos = []
         if record_seconds % DURATION == 0:
@@ -139,7 +138,7 @@ class AudioAnalyzer:
             per_duration = (record_seconds // DURATION)
 
         for i in range(per_duration):
-            y, sr = librosa.load(PATH, offset=DURATION * i, duration=DURATION, sr=16000)
+            y, sr = librosa.load(Path.path_SoundOuput(), offset=DURATION * i, duration=DURATION, sr=16000)
             onset_env = librosa.onset.onset_strength(y, sr=sr, aggregate=np.median)
             tempo, beats = librosa.beat.beat_track(onset_envelope=onset_env, sr=sr)
             tempos.append(tempo)
@@ -149,7 +148,7 @@ class AudioAnalyzer:
     # todo : 최주연님, 녹화된 음성 분석
     # 음성 인식 함수
     def get_subscription(self):
-        from RecordScreen import PER, PATH, record_seconds
+        from RecordScreen import PER, record_seconds
 
         global splited_wavefile
 
@@ -161,7 +160,7 @@ class AudioAnalyzer:
 
         for i in range(repeat):
             t = 1000 * PER  # per sec
-            new_audio = AudioSegment.from_wav(PATH)
+            new_audio = AudioSegment.from_wav(Path.path_SoundOuput())
 
             # 원본 wav 파일 나누기
             if i == repeat - 1:
@@ -173,7 +172,7 @@ class AudioAnalyzer:
                 new_audio = new_audio[t * i:t * (i + 1)]
 
             # 나눠진 파일 생성
-            file_name = "Output/{0}second{1}.wav".format(PER, i)
+            file_name = Path.path_SoundDistributedFile(PER,i)
             splited_wavefile.append(file_name)
             new_audio.export(file_name, format="wav")
             audioFilePath_ = file_name

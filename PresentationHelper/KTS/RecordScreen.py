@@ -1,9 +1,7 @@
-import sys
 import threading
 import time
 
 import cv2
-import numpy as np
 from PyQt5.QtGui import QPixmap
 from threading import Thread
 from PyQt5.uic import loadUi
@@ -15,9 +13,7 @@ import pyaudio
 import audioop
 import wave
 import math
-import keras.models
-import datetime
-from logging import log
+from Path import Path
 
 ## 오디오 녹음에 필요한 상수
 from keras_preprocessing.image import img_to_array
@@ -28,8 +24,6 @@ FORMAT = pyaudio.paInt16
 CHANNELS = 1
 # 샘플링 레이트(sr)
 RATE = 22050
-# record 함수 결과가 저장될 위치
-PATH= "Output/output.wav"
 # 데시벨, 템포 기준 초
 DURATION = 5
 # 음성 인식 기준 초
@@ -43,7 +37,7 @@ class RecordScreen(QMainWindow):
 
     def __init__(self, controller):
         super(RecordScreen, self).__init__()
-        loadUi("UI/record.ui", self)
+        loadUi(Path.path_RecordScreen(), self)
         self.controller = controller
 
     # 화면 넘어왔을때 호출되는 함수
@@ -110,7 +104,7 @@ class AudioStream:
         self.RATE = RATE
         self.FORMAT = FORMAT
         self.CHANNELS = CHANNELS
-        self.PATH = PATH
+        self.PATH = Path.path_SoundOuput()
         self.DURATION = DURATION
         self.frames = []
         self.stream = self.p.open(format=self.FORMAT,

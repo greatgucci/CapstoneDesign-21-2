@@ -1,6 +1,7 @@
 from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QMainWindow
 from AnalyzingScreen import FaceData
+from Path import Path
 
 #UI
 #texts : audio_result,audio_suggestion,video_result,video_suggestion
@@ -9,7 +10,7 @@ class AnalyzedScreen(QMainWindow):
 
     def __init__(self, controller):
         super(AnalyzedScreen, self).__init__()
-        loadUi("UI/analyzed.ui", self)
+        loadUi(Path.path_AnalyzedScreen(), self)
         self.controller = controller
         self.to_welcome.clicked.connect(self.goto_welcome)
         self.to_rewatch.clicked.connect(self.goto_rewatch)

@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="view">
+   <widget class="QLabel" name="video">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -27,7 +27,7 @@
      <string/>
     </property>
    </widget>
-   <widget class="QLabel" name="video_data">
+   <widget class="QLabel" name="video_text">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -47,7 +47,7 @@ color:rgb(255, 255, 255)</string>
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
     </property>
    </widget>
-   <widget class="QLabel" name="audio_data">
+   <widget class="QLabel" name="audio_text">
     <property name="geometry">
      <rect>
       <x>450</x>
