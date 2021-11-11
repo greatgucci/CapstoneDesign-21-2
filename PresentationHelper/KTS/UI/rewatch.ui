@@ -33,7 +33,7 @@
       <x>20</x>
       <y>20</y>
       <width>391</width>
-      <height>231</height>
+      <height>451</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -52,8 +52,8 @@ color:rgb(255, 255, 255)</string>
      <rect>
       <x>450</x>
       <y>20</y>
-      <width>391</width>
-      <height>231</height>
+      <width>421</width>
+      <height>451</height>
      </rect>
     </property>
     <property name="styleSheet">

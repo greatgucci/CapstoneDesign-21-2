@@ -30,7 +30,7 @@ background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>560</x>
+       <x>540</x>
        <y>140</y>
        <width>511</width>
        <height>101</height>
@@ -41,7 +41,7 @@ background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba
 font: 36pt &quot;예스 고딕 레귤러&quot;;</string>
      </property>
      <property name="text">
-      <string>발표 분석 어플리케이션</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:24pt;&quot;&gt;발표 분석 어플리케이션&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_2">
@@ -58,7 +58,7 @@ font: 36pt &quot;예스 고딕 레귤러&quot;;</string>
 color:rgb(255, 255, 255)</string>
      </property>
      <property name="text">
-      <string>21-2 캡스톤 디자인 6조</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;21-2 캡스톤 디자인 6조&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QPushButton" name="record">
@@ -73,7 +73,7 @@ color:rgb(255, 255, 255)</string>
      <property name="styleSheet">
       <string notr="true">border-radius:60px;
 background-color:rgb(217, 140, 121);
-font: 16pt &quot;예스 고딕 레귤러&quot;;
+font: 12pt &quot;예스 고딕 레귤러&quot;;
 color:rgb(255, 255, 255);</string>
      </property>
      <property name="text">
