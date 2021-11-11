@@ -33,6 +33,8 @@ class Controller:
         self.widgetList[index].onload()
 
 
+
+
 # main
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'   # tensorflow error 메시지 제외하고 무시

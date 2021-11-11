@@ -1,8 +1,8 @@
-import sys
 import threading
 import time
 
 import cv2
+
 from PyQt5.QtGui import QPixmap
 from threading import Thread
 from PyQt5.uic import loadUi
@@ -14,17 +14,17 @@ import pyaudio
 import audioop
 import wave
 import math
-from logging import log
+from Path import Path
+
 
 ## 오디오 녹음에 필요한 상수
+from keras_preprocessing.image import img_to_array
 CHUNK = 512
 # 16bit는 각 샘플의 크기
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 # 샘플링 레이트(sr)
 RATE = 22050
-# record 함수 결과가 저장될 위치
-PATH= "Output/output.wav"
 # 데시벨, 템포 기준 초
 DURATION = 5
 # 음성 인식 기준 초
@@ -32,13 +32,13 @@ PER = 14
 
 ## 오디오 녹음에 필요한 전역 변수
 decibels = []
-record_seconds = 10
+record_seconds = 30
 
 class RecordScreen(QMainWindow):
 
     def __init__(self, controller):
         super(RecordScreen, self).__init__()
-        loadUi("UI/record.ui", self)
+        loadUi(Path.path_RecordScreen(), self)
         self.controller = controller
 
     # 화면 넘어왔을때 호출되는 함수
@@ -76,7 +76,7 @@ class GraphicView:
         self.viewThread.start()
 
     def drawEvent(self):
-        start = time.process_time()
+        start = time.time()
         while not self.stopped:
             img = cv2.cvtColor(self.window.video.read(), cv2.COLOR_BGR2RGB)
             qt_img = QtGui.QImage(img, img.shape[1], img.shape[0], QtGui.QImage.Format_RGB888)
@@ -84,7 +84,7 @@ class GraphicView:
             self.window.graphic.setPixmap(pxm.scaled(self.screen_w, self.screen_h))
             self.window.graphic.update()
 
-            self.currentTime = time.process_time() - start
+            self.currentTime = time.time() - start
             self.window.time.setText("시간 : "+str(int(self.currentTime)))
             self.window.time.update()
             time.sleep(self.drawInterval)
@@ -105,7 +105,7 @@ class AudioStream:
         self.RATE = RATE
         self.FORMAT = FORMAT
         self.CHANNELS = CHANNELS
-        self.PATH = PATH
+        self.PATH = Path.path_SoundOuput()
         self.DURATION = DURATION
         self.frames = []
         self.stream = self.p.open(format=self.FORMAT,
@@ -113,6 +113,7 @@ class AudioStream:
                         rate=self.RATE,
                         input=True,
                         frames_per_buffer=self.CHUNK)
+        self.stream.start_stream()
 
     def start(self):
         self.thread = threading.Thread(target=self.record)
@@ -120,8 +121,6 @@ class AudioStream:
 
     def record(self):
         print("녹음을 시작합니다")
-        self.stream.start_stream()
-        
         for i in range(0, int(self.RATE / self.CHUNK * record_seconds)):
             data = self.stream.read(CHUNK)
             self.frames.append(data)
