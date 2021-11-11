@@ -50,22 +50,42 @@ class AnalyzedScreen(QMainWindow):
 
     # 분석 결과 유저에게 전달하는 함수
     def print_audio_data(self, sound_data):
-        volume_text = '볼륨(dB): '
+        
+        # 평균값
+        volume_sum = 0.0
+        tempo_sum = 0.0
         for i in range(len(sound_data[0])):
-            volume_text += str(round(sound_data[0][i], 1))+'초'
-        volume_text += '\n'
+            volume_sum += round(sound_data[0][i], 1)
+            tempo_sum += round(sound_data[1][i], 1)
 
-        tempo_text = '빠르기(tempo): '
-        for j in range(len(sound_data[1])):
-            tempo_text += str(round(sound_data[1][j], 1))+'초'
-        tempo_text += '\n'
+        volume_avg = volume_sum / len(sound_data[0])
+        tempo_avg = tempo_sum / len(sound_data[0])
+
+        volume_text = '볼륨(dB): '+str(volume_avg)+'\n'
+        tempo_text = '빠르기(tempo): '+str(tempo_avg)+'\n'
+
+        volume_suggestion = '볼륨: '
+        # 수정
+        if volume_avg < 55:
+            volume_suggestion += '좀 더 크게 말하시면 좋겠네요'
+        elif volume_avg > 70:
+            volume_suggestion += '좀 더 작게 말하시면 좋겠네요'
+        volume_suggestion += '\n'
+
+        # 수정
+        tempo_suggestion = '빠르기: '
+        if tempo_avg < 100:
+            tempo_suggestion += '좀 더 빠르게 말하시면 좋겠네요'
+        elif tempo_avg > 140:
+            tempo_suggestion += '좀 더 느리게 말하시면 좋겠네요'
+        tempo_suggestion += '\n'
 
         sub_text = '음성 인식: '
         for k in range(len(sound_data[2])):
             sub_text += sound_data[2][k]
         sub_text += '\n'
-
-        self.audio_suggestion.setText("좀 더 차분하게 말하시면 좋겠네요!")
+        
+        self.audio_suggestion.setText(volume_suggestion+tempo_suggestion+'\n')
         self.audio_result.setText(volume_text+tempo_text+sub_text)
         self.audio_result.update()
 
