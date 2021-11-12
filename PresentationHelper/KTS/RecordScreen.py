@@ -32,7 +32,7 @@ PER = 14
 
 ## 오디오 녹음에 필요한 전역 변수
 decibels = []
-record_seconds = 10
+record_seconds = 30
 
 class RecordScreen(QMainWindow):
 
