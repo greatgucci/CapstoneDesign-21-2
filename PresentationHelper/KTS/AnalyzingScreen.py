@@ -23,6 +23,7 @@ accessKey = "62dbdbd8-e605-4035-a608-fb4563c92888"
 languageCode = "korean"
 
 splited_wavefile = []
+subscription = []
 
 class AnalyzingScreen(QMainWindow):
     delay = 0.125
@@ -119,10 +120,10 @@ class AudioAnalyzer:
         print("audio analyze start\n")
         # decibels를 data에 저장
         self.data.append(decibels)
-        # tempo_analysis 결과 data에 저장
-        self.data.append(self.tempo_analysis())
         # get_subscription 결과 data에 저장
         self.data.append(self.get_subscription())
+        # tempo_analysis 결과 data에 저장
+        self.data.append(self.tempo_analysis())
         print("audio analyze end\n")
         self.isAnalyzing = False
 
@@ -131,30 +132,34 @@ class AudioAnalyzer:
     # 빠르기 분석
     def tempo_analysis(self):
 
+        global subscription
         from RecordScreen import DURATION, PER, record_seconds
 
-        tempos = []
-        if record_seconds % DURATION == 0:
-            per_duration = record_seconds // DURATION - 1
-        else:
-            per_duration = (record_seconds // DURATION)
+        # tempos = []
+        # if record_seconds % DURATION == 0:
+        #     per_duration = record_seconds // DURATION - 1
+        # else:
+        #     per_duration = (record_seconds // DURATION)
 
-        for i in range(per_duration):
-            y, sr = librosa.load(Path.path_SoundOuput(), offset=DURATION * i, duration=DURATION, sr=16000)
-            onset_env = librosa.onset.onset_strength(y, sr=sr, aggregate=np.median)
-            tempo, beats = librosa.beat.beat_track(onset_envelope=onset_env, sr=sr)
-            tempos.append(tempo)
+        # for i in range(per_duration):
+        #     y, sr = librosa.load(Path.path_SoundOuput(), offset=DURATION * i, duration=DURATION, sr=16000)
+        #     onset_env = librosa.onset.onset_strength(y, sr=sr, aggregate=np.median)
+        #     tempo, beats = librosa.beat.beat_track(onset_envelope=onset_env, sr=sr)
+        #     tempos.append(tempo)
 
-        return tempos
+        # return tempos
+        spm_per_sec_analysis = []
+        for i in range(len(subscription)):
+            spm_per_sec_analysis.append(round(len(subscription[i])/PER, 2))
+        return spm_per_sec_analysis
 
     # todo : 최주연님, 녹화된 음성 분석
     # 음성 인식 함수
     def get_subscription(self):
         from RecordScreen import PER, record_seconds
 
-        global splited_wavefile
+        global splited_wavefile, subscription
 
-        subscription = []
         # 원본 wav파일 나누는 횟수
         repeat = record_seconds // PER
         if record_seconds % PER != 0:

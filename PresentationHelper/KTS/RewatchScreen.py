@@ -44,7 +44,9 @@ class AudioView:
         self.window = window
         #todo : 이거에 set string 하시면 됩니다.
         self.audio_text = window.audio_text 
+        self.audio_tempo_text = window.audio_tempo_text 
         self.audio_sub_text = window.audio_sub_text
+
         self.audio_data = audio_data
 
         self.open = True
@@ -64,41 +66,62 @@ class AudioView:
         self.viewThread.start()
 
     def play(self):
-        from RecordScreen import  DURATION, PER
+        from RecordScreen import  DURATION, PER, record_seconds
         
         self.start = time.time()
         data = self.wf.readframes(self.CHUNK)
+
+        # 수정
         text = ''
         sub_text = ''
+        tempo_text = ''
         n = 0
-        
+        sub_n = 0
+        check_text = False
+        check_sub_text = False
         while data != b'':
-            check_time = int(time.time() - self.start)
+            # 흘러간 시간 측정
+            check_time = time.time() - self.start
             
-            if check_time > 0 and check_time % DURATION == 0 and check_text == False:
-                text += str((n+1)*DURATION)+'초'+'\n'
+            # check_time이 5의 배수일 경우
+            if check_time > 0 and int(check_time) % DURATION == 0 and check_text == False and n != (record_seconds // DURATION):
+                text = str((n+1)*DURATION)+'초'+'\n'
                 text += '볼륨: '+str(round(self.audio_data[0][n], 1))+'dB'+'\n'
-                text += '빠르기: '+str(round(self.audio_data[1][n], 2))
                 self.audio_text.setText(text)
                 self.audio_text.update()
                 check_text = True
-            check_text == False
-            if check_time > 0 and check_time % PER == 0 and check_sub_text == False:
-                sub_text += self.audio_data[2][n]
+                n += 1
+                
+            # check_time이 5의 배수가 아닐 경우
+            if check_time > (n+1)*DURATION:
+                check_text = False
+            # check_time이 14의 배수일 경우
+            if int(check_time) % PER == 0 and check_sub_text == False:
+                tempo_text = str((sub_n+1)*PER)+'초'+'\n'
+                tempo_text += '빠르기: '+str(round(self.audio_data[2][n], 2))+'\n'
+                self.audio_tempo_text.setText(tempo_text)
+                self.audio_tempo_text.update()
+                sub_text = self.audio_data[1][sub_n]
                 self.audio_sub_text.setText(sub_text)
                 self.audio_sub_text.update()
                 check_sub_text = True
-            check_sub_text == False
+                sub_n += 1
+                
+            # check_time이 514의 배수가 아닐 경우
+            if check_time > (n+1)*DURATION:
+                check_sub_text = False
             
             self.stream.write(data)
             data = self.wf.readframes(self.CHUNK)
 
         self.stream.stop_stream()
         self.stream.close()
-
+        print(self.audio_data[1])
         self.p.terminate()
         self.isPlay = False
         self.window.on_stream_end()
+        # print('걸린 시간: ')
+        # print(time.time()-self.start)
 
 
 #영상 출력 스레드

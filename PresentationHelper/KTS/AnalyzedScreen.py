@@ -53,8 +53,8 @@ class AnalyzedScreen(QMainWindow):
         from RecordScreen import PER, record_seconds
 
         sub_text_temp = ''
-        for k in range(len(sound_data[2])):
-            sub_text_temp += sound_data[2][k]
+        for k in range(len(sound_data[1])):
+            sub_text_temp += sound_data[1][k]
 
         # 평균값
         volume_sum = 0.0
