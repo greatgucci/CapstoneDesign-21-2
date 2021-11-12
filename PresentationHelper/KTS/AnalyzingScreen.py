@@ -23,6 +23,7 @@ accessKey = "62dbdbd8-e605-4035-a608-fb4563c92888"
 languageCode = "korean"
 
 splited_wavefile = []
+subscription = []
 
 class AnalyzingScreen(QMainWindow):
     delay = 0.125
@@ -48,7 +49,6 @@ class AnalyzingScreen(QMainWindow):
 
         self.controller.video_analyze_data = self.videoAnalyzer.getData()
         self.controller.sound_analyze_data = self.audioAnalyzer.getData()
-
         self.goto_analyzed()
 
     def goto_analyzed(self):
@@ -65,6 +65,7 @@ class VideoAnalyzer:
         face_detection = cv2.CascadeClassifier(Path.path_Haarcascarde())
         emotion_classifier = keras.models.load_model(Path.path_EmotionModel(), False)
         cap = cv2.VideoCapture(Path.path_VideoOutput())
+        
 
         frame_cnt = 0
 
@@ -73,6 +74,7 @@ class VideoAnalyzer:
             if ret:
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                 faces = face_detection.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+                
                 if len(faces) > 0:
                     # For the largest image
                     face = sorted(faces, reverse=True, key=lambda x: (x[2] - x[0]) * (x[3] - x[1]))[0]
@@ -118,41 +120,46 @@ class AudioAnalyzer:
         print("audio analyze start\n")
         # decibels를 data에 저장
         self.data.append(decibels)
-        # tempo_analysis 결과 data에 저장
-        self.data.append(self.tempo_analysis())
         # get_subscription 결과 data에 저장
         self.data.append(self.get_subscription())
+        # tempo_analysis 결과 data에 저장
+        self.data.append(self.tempo_analysis())
         print("audio analyze end\n")
         self.isAnalyzing = False
+
 
     # todo : 최주연님, 녹화된 음성 분석
     # 빠르기 분석
     def tempo_analysis(self):
 
+        global subscription
         from RecordScreen import DURATION, PER, record_seconds
 
-        tempos = []
-        if record_seconds % DURATION == 0:
-            per_duration = record_seconds // DURATION - 1
-        else:
-            per_duration = (record_seconds // DURATION)
+        # tempos = []
+        # if record_seconds % DURATION == 0:
+        #     per_duration = record_seconds // DURATION - 1
+        # else:
+        #     per_duration = (record_seconds // DURATION)
 
-        for i in range(per_duration):
-            y, sr = librosa.load(Path.path_SoundOuput(), offset=DURATION * i, duration=DURATION, sr=16000)
-            onset_env = librosa.onset.onset_strength(y, sr=sr, aggregate=np.median)
-            tempo, beats = librosa.beat.beat_track(onset_envelope=onset_env, sr=sr)
-            tempos.append(tempo)
+        # for i in range(per_duration):
+        #     y, sr = librosa.load(Path.path_SoundOuput(), offset=DURATION * i, duration=DURATION, sr=16000)
+        #     onset_env = librosa.onset.onset_strength(y, sr=sr, aggregate=np.median)
+        #     tempo, beats = librosa.beat.beat_track(onset_envelope=onset_env, sr=sr)
+        #     tempos.append(tempo)
 
-        return tempos
+        # return tempos
+        spm_per_sec_analysis = []
+        for i in range(len(subscription)):
+            spm_per_sec_analysis.append(round(len(subscription[i])/PER, 2))
+        return spm_per_sec_analysis
 
     # todo : 최주연님, 녹화된 음성 분석
     # 음성 인식 함수
     def get_subscription(self):
         from RecordScreen import PER, record_seconds
 
-        global splited_wavefile
+        global splited_wavefile, subscription
 
-        subscription = []
         # 원본 wav파일 나누는 횟수
         repeat = record_seconds // PER
         if record_seconds % PER != 0:

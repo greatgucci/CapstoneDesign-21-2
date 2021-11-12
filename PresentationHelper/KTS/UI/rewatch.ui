@@ -67,6 +67,43 @@ color:rgb(255, 255, 255)</string>
      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
     </property>
    </widget>
+   <widget class="QLabel" name="audio_tempo_text">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>110</y>
+      <width>421</width>
+      <height>451</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 16pt &quot;예스 고딕 레귤러&quot;;
+color:rgb(255, 255, 255)</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="audio_sub_text">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>500</y>
+      <width>421</width>
+      <height>451</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 20pt &quot;예스 고딕 레귤러&quot;;
+color:rgb(0, 0, 0)</string>
+    </property>
+    <!-- <property name="text">
+     <string>오디오 분석 내용</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+    </property> --> -->
+   </widget>
   </widget>
  </widget>
  <resources/>

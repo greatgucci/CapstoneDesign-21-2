@@ -2,6 +2,7 @@ import threading
 import time
 
 import cv2
+
 from PyQt5.QtGui import QPixmap
 from threading import Thread
 from PyQt5.uic import loadUi
@@ -15,9 +16,9 @@ import wave
 import math
 from Path import Path
 
+
 ## 오디오 녹음에 필요한 상수
 from keras_preprocessing.image import img_to_array
-
 CHUNK = 512
 # 16bit는 각 샘플의 크기
 FORMAT = pyaudio.paInt16
