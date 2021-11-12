@@ -136,7 +136,6 @@ class VideoView:
         self.isPlay = True
         self.window = window
         self.video = window.video
-        self.text = window.video_text
         self.face_data = face_data
         self.viewThread = Thread(target=self.drawEvent, args=())
         self.viewThread.start()
@@ -146,6 +145,11 @@ class VideoView:
         interval = 1/cap.get(cv2.CAP_PROP_FPS)
         frame_cnt = 0
         face_data_index = 0
+        threshold = 20
+        highlight = "font: 16pt \"예스 고딕 레귤러\"; background-color:rgba(0, 0, 0, 125); Color : red"
+        normal = "font: 16pt \"예스 고딕 레귤러\"; background-color:rgba(0, 0, 0, 125); Color : white"
+        text_ui_list = [self.window.video_text0,self.window.video_text1,self.window.video_text2,self.window.video_text3,
+                        self.window.video_text4,self.window.video_text5,self.window.video_text6]
 
         while cap.isOpened():
             time_start = time.time()
@@ -163,12 +167,15 @@ class VideoView:
                 # draw text
                 if (face_data_index < len(self.face_data)) and (frame_cnt >= self.face_data[face_data_index].frame):
                     data = self.face_data[face_data_index]
-                    text = "표정\n"
+                    self.window.video_text_title.setText("표정")
                     for i in range(len(data.emotion_types)):
-                        value = int(data.emotions[i] * 100)
-                        text += data.emotion_types[i] + " : " + str(value) + "%\n"
-                    self.text.setText(text)
-                    self.text.update()
+                        val = int(data.emotions[i] * 100)
+                        text_ui_list[i].setText(data.emotion_types[i] + " : " + str(val) + "%")
+                        if (val >= threshold):
+                            text_ui_list[i].setStyleSheet(highlight)
+                        else:
+                            text_ui_list[i].setStyleSheet(normal)
+
                     face_data_index += 1
 
                 #wait

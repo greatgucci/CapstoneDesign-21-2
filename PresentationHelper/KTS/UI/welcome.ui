@@ -25,13 +25,13 @@
     </property>
     <property name="styleSheet">
      <string notr="true">QWidget#widget{
-background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(217, 75, 154, 255), stop:1 rgba(219, 255, 174, 255))}</string>
+background-color: qlineargradient(spread:pad, x1:0.534, y1:0.698727, x2:0.534, y2:1, stop:0 rgba(52, 52, 52, 255), stop:1 rgba(139, 139, 139, 255))};</string>
     </property>
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>540</x>
-       <y>140</y>
+       <x>550</x>
+       <y>110</y>
        <width>511</width>
        <height>101</height>
       </rect>
@@ -41,16 +41,16 @@ background-color:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba
 font: 36pt &quot;예스 고딕 레귤러&quot;;</string>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:24pt;&quot;&gt;발표 분석 어플리케이션&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:48pt;&quot;&gt;발표 도우미&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>680</x>
-       <y>220</y>
-       <width>231</width>
-       <height>51</height>
+       <x>630</x>
+       <y>250</y>
+       <width>331</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -58,21 +58,21 @@ font: 36pt &quot;예스 고딕 레귤러&quot;;</string>
 color:rgb(255, 255, 255)</string>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;21-2 캡스톤 디자인 6조&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:20pt;&quot;&gt;21-2 캡스톤 디자인 6조&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QPushButton" name="record">
      <property name="geometry">
       <rect>
        <x>750</x>
-       <y>700</y>
+       <y>740</y>
        <width>141</width>
        <height>121</height>
       </rect>
      </property>
      <property name="styleSheet">
       <string notr="true">border-radius:60px;
-background-color:rgb(217, 140, 121);
+background-color:rgb(60, 60, 60);
 font: 12pt &quot;예스 고딕 레귤러&quot;;
 color:rgb(255, 255, 255);</string>
      </property>
