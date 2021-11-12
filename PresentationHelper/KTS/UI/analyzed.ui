@@ -160,13 +160,13 @@ color:rgb(255, 255, 255)</string>
      <property name="geometry">
       <rect>
        <x>970</x>
-       <y>200</y>
-       <width>341</width>
-       <height>91</height>
+       <y>212</y>
+       <width>375</width>
+       <height>106</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">font: 16pt &quot;예스 고딕 레귤러&quot;;
+      <string notr="true">font: 12pt &quot;예스 고딕 레귤러&quot;;
 color:rgb(255, 255, 255)</string>
      </property>
      <property name="text">
@@ -186,7 +186,7 @@ color:rgb(255, 255, 255)</string>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">font: 16pt &quot;예스 고딕 레귤러&quot;;
+      <string notr="true">font: 10pt &quot;예스 고딕 레귤러&quot;;
 color:rgb(255, 255, 255)</string>
      </property>
      <property name="text">

@@ -98,9 +98,10 @@ class AudioView:
             # check_time이 14의 배수일 경우
             if int(check_time) % PER == 0 and check_sub_text == False:
                 tempo_text = str((sub_n+1)*PER)+'초'+'\n'
-                tempo_text += '빠르기: '+str(round(self.audio_data[2][n], 2))+'\n'
-                self.audio_tempo_text.setText(tempo_text)
-                self.audio_tempo_text.update()
+                if check_time > 0:
+                    tempo_text += '빠르기: '+str(round(self.audio_data[2][n], 2))+'\n'
+                    self.audio_tempo_text.setText(tempo_text)
+                    self.audio_tempo_text.update()
                 sub_text = self.audio_data[1][sub_n]
                 self.audio_sub_text.setText(sub_text)
                 self.audio_sub_text.update()
