@@ -1,3 +1,4 @@
+from PyQt5.QtGui import QColor
 from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QMainWindow
 from AnalyzingScreen import FaceData
@@ -24,9 +25,11 @@ class AnalyzedScreen(QMainWindow):
 
     def print_video_data(self, video_data):
         result = []
+        text_ui_list = [self.video_result0, self.video_result1, self.video_result2,
+                        self.video_result3, self.video_result4, self.video_result5, self.video_result6]
+
         total = [0]*len(FaceData.emotion_types)
-        text = "캡쳐된 표정수 : "+str(len(video_data)) + "\n\n"
-        text += "평균값\n"
+        self.video_result_title.setText("캡쳐된 표정수 : "+str(len(video_data)))
 
         for i in range(len(video_data)):
             for j in range(len(FaceData.emotion_types)):
@@ -34,19 +37,28 @@ class AnalyzedScreen(QMainWindow):
 
         for i in range(len(FaceData.emotion_types)):
             result.append(int(total[i] / len(video_data) * 100))
-            text += FaceData.emotion_types[i] + " : " + str(result[i]) + "%\n"
+            text_ui_list[i].setText(FaceData.emotion_types[i] + " : " + str(result[i]) + "%")
+            
+        threshold = 20 #기준값
+        highlight = "font: 20pt \"예스 고딕 레귤러\"; Color : red"
+        normal = "font: 20pt \"예스 고딕 레귤러\"; Color : white"
 
-        if(result[0]>=25):
-            self.video_suggestion.setText("너무 화나보여요")
-        elif(result[4]>=25):
+        text_ui_list[0].setStyleSheet(normal)
+        text_ui_list[3].setStyleSheet(normal)
+        text_ui_list[4].setStyleSheet(normal)
+
+        if(result[0] >= threshold):
+            self.video_suggestion.setText("헉.. 너무 화나보여요")
+            text_ui_list[0].setStyleSheet(highlight)
+        elif(result[4] >= threshold):
             self.video_suggestion.setText("너무 슬퍼 보여요..")
-        elif(result[3]<=25):
-            self.video_suggestion.setText("좀 더 웃으면 좋겠네요")
+            text_ui_list[4].setStyleSheet(highlight)
+        elif(result[3] <= threshold):
+            self.video_suggestion.setText("좀 더 웃어 보면 어떨까요?")
+            text_ui_list[3].setStyleSheet(highlight)
         else:
             self.video_suggestion.setText("훌륭 해요!")
 
-        self.video_result.setText(text)
-        self.video_result.update()
 
     # 분석 결과 유저에게 전달하는 함수
     def print_audio_data(self, sound_data):

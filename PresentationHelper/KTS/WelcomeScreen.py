@@ -2,7 +2,6 @@ from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import QMainWindow
 from Path import Path
 
-
 class WelcomeScreen(QMainWindow):
     def __init__(self, controller):
         super(WelcomeScreen, self).__init__()
