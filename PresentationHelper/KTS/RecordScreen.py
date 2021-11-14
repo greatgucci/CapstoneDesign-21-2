@@ -124,7 +124,6 @@ class AudioStream:
         for i in range(0, int(self.RATE / self.CHUNK * record_seconds)):
             data = self.stream.read(CHUNK)
             self.frames.append(data)
-            # print(i)
             if i % (int(self.RATE / self.CHUNK) * self.DURATION) == 0 and 0 < i < int(self.RATE / self.CHUNK) * record_seconds:
                 # 볼륨 체크
                 # 2는 sampling width in byte 

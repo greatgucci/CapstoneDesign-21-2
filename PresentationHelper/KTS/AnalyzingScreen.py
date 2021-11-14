@@ -151,6 +151,8 @@ class AudioAnalyzer:
         spm_per_sec_analysis = []
         for i in range(len(subscription)):
             spm_per_sec_analysis.append(round(len(subscription[i])/PER, 2))
+        print('spm_per_sec_analysis')
+        print(spm_per_sec_analysis)
         return spm_per_sec_analysis
 
     # todo : 최주연님, 녹화된 음성 분석
@@ -198,6 +200,7 @@ class AudioAnalyzer:
             }
 
             http = urllib3.PoolManager()
+            # try: 
             response = http.request(
                 "POST",
                 openApiURL,
@@ -208,6 +211,18 @@ class AudioAnalyzer:
             data = json.loads(response.data.decode("utf-8", errors='ignore'))
             subscription.append(data['return_object']['recognized'])
         return subscription
+            # except:
+            #     time.sleep(2)
+            #     response = http.request(
+            #         "POST",
+            #         openApiURL,
+            #         headers={"Content-Type": "application/json; charset=UTF-8"},
+            #         body=json.dumps(requestJson)
+            #     )
+
+            #     data = json.loads(response.data.decode("utf-8", errors='ignore'))
+            #     subscription.append(data['return_object']['recognized'])
+            #     return subscription
 
     def getData(self):
         return self.data

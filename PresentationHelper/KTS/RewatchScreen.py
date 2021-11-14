@@ -91,25 +91,27 @@ class AudioView:
                 self.audio_text.update()
                 check_text = True
                 n += 1
-                
             # check_time이 5의 배수가 아닐 경우
             if check_time > (n+1)*DURATION:
                 check_text = False
+
             # check_time이 14의 배수일 경우
             if int(check_time) % PER == 0 and check_sub_text == False:
-                tempo_text = str((sub_n+1)*PER)+'초'+'\n'
                 if check_time > 0:
-                    tempo_text += '빠르기: '+str(round(self.audio_data[2][n], 2))+'\n'
+                    tempo_text = str((sub_n)*PER)+'초'+'\n'
+                    tempo_text += '빠르기: '+str(round(self.audio_data[2][sub_n-1], 2))+'\n'
                     self.audio_tempo_text.setText(tempo_text)
                     self.audio_tempo_text.update()
+                if sub_n == record_seconds // PER and record_seconds % PER != 0:
+                    sub_text = self.audio_data[1][-1]
                 sub_text = self.audio_data[1][sub_n]
                 self.audio_sub_text.setText(sub_text)
                 self.audio_sub_text.update()
                 check_sub_text = True
                 sub_n += 1
                 
-            # check_time이 514의 배수가 아닐 경우
-            if check_time > (n+1)*DURATION:
+            # check_time이 14의 배수가 아닐 경우
+            if check_time > (sub_n+1)*DURATION:
                 check_sub_text = False
             
             self.stream.write(data)

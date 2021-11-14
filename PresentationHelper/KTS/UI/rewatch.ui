@@ -87,9 +87,9 @@ color:rgb(255, 255, 255)</string>
    <widget class="QLabel" name="audio_sub_text">
     <property name="geometry">
      <rect>
-      <x>450</x>
+      <x>200</x>
       <y>500</y>
-      <width>421</width>
+      <width>1200</width>
       <height>451</height>
      </rect>
     </property>
