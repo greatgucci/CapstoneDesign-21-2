@@ -9,8 +9,6 @@ from RecordScreen import RecordScreen
 from AnalyzingScreen import AnalyzingScreen
 from AnalyzedScreen import AnalyzedScreen
 
-import pyaudio
-
 class Controller:
     video_analyze_data = []
     sound_analyze_data = []
@@ -33,10 +31,7 @@ class Controller:
         self.widgetList[index].onload()
 
 
-
-
 # main
-
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'   # tensorflow error 메시지 제외하고 무시
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # tensorflow cpu 사용
 app = QApplication(sys.argv)

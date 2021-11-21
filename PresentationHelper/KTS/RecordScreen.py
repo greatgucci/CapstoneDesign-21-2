@@ -16,9 +16,9 @@ import wave
 import math
 from Path import Path
 
+from keras_preprocessing.image import img_to_array
 
 ## 오디오 녹음에 필요한 상수
-from keras_preprocessing.image import img_to_array
 CHUNK = 512
 # 16bit는 각 샘플의 크기
 FORMAT = pyaudio.paInt16
@@ -28,7 +28,7 @@ RATE = 22050
 # 데시벨, 템포 기준 초
 DURATION = 5
 # 음성 인식 기준 초
-PER = 14
+PER = 10
 
 ## 오디오 녹음에 필요한 전역 변수
 decibels = []
@@ -128,7 +128,6 @@ class AudioStream:
                 # 볼륨 체크
                 # 2는 sampling width in byte 
                 rms = audioop.rms(data,2)
-                #rms 0보다 클 경우
                 if(rms > 0):
                     # 데시벨 단위로 변환
                     decibel = 20 * math.log(rms, 10)
@@ -138,13 +137,6 @@ class AudioStream:
         self.window.OnAudioRecordEnd()
 
     def stop(self):
-        # start_time = time.time()
-        # end_time = time.time()
-        # remain_time = record_seconds - int(end_time-start_time)
-        # delete_time = remain_time // PER
-        # print(remain_time)
-        # if delete_time > 0 :
-        #     frames = frames[:-(int(RATE / CHUNK)*PER*delete_time)]
         if self.open == True:
             self.open = False
             self.stream.stop_stream()
