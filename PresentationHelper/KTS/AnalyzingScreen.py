@@ -123,7 +123,6 @@ class AudioAnalyzer:
         self.data.append(self.get_subscription())
         # 빠르기 분석 결과 저장
         self.data.append(self.tempo_analysis())
-        print(self.data)
         print("audio analyze end\n")
         self.isAnalyzing = False
 
@@ -191,7 +190,6 @@ class AudioAnalyzer:
 
             data = json.loads(response.data.decode("utf-8", errors='ignore'))
             subscription.append(data['return_object']['recognized'])
-            print('data', data)
         
         return subscription
 

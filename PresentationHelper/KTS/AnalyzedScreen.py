@@ -143,7 +143,8 @@ class AnalyzedScreen(QMainWindow):
         self.audio_suggestion.setText(volume_suggestion+spm_suggestion+'\n')
         
     def add_page(self):
-        print('페이지 추가')
+        # page 넘김 추가
+        pass
 
     def goto_welcome(self):
         self.controller.setScreen(0)
