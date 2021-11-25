@@ -44,9 +44,10 @@ class AnalyzingScreen(QMainWindow):
 
         while self.audioAnalyzer.isAnalyzing:
             pass
-
+        
         self.controller.video_analyze_data = self.videoAnalyzer.getData()
         self.controller.sound_analyze_data = self.audioAnalyzer.getData()
+        
         self.goto_analyzed()
 
     def goto_analyzed(self):
@@ -122,6 +123,7 @@ class AudioAnalyzer:
         self.data.append(self.get_subscription())
         # 빠르기 분석 결과 저장
         self.data.append(self.tempo_analysis())
+        print(self.data)
         print("audio analyze end\n")
         self.isAnalyzing = False
 
@@ -146,7 +148,6 @@ class AudioAnalyzer:
         repeat = record_seconds // PER
         if record_seconds % PER != 0:
             repeat += 1
-
         for i in range(repeat):
             # ms -> s
             t = 1000 * PER  
@@ -190,36 +191,8 @@ class AudioAnalyzer:
 
             data = json.loads(response.data.decode("utf-8", errors='ignore'))
             subscription.append(data['return_object']['recognized'])
-
-        # # 스크립트 파일과 비교
-        # f = open('script/발표 대본.txt', 'r', encoding='UTF-8-SIG')
-        # lines = f.readlines()
-        # for line in lines:
-        #     line.rstrip('\n')
-
-        # # string으로 변환
-        # scripts = ''.join(lines)
-        # subscription_text = ''.join(subscription)
+            print('data', data)
         
-        # # 문자열 공백 제거
-        # scripts = scripts.replace(" ", "")
-        # subscription_text = subscription_text.replace(" ", "")
-        
-        # i = 0
-        # # 대본 길이 <= 음성 인식 길이
-        # if len(scripts) <= len(subscription_text):
-        #     for i in range(len(scripts)):
-        #         if scripts[i] != subscription_text[i]:
-        #             idx.append(i)
-        #     for j in range(len(scripts), len(subscription_text)):
-        #         idx.append(j)
-        # # 대본 길이 > 음성 인식 길이
-        # elif len(scripts) > len(subscription_text):
-        #     for i in range(len(subscription_text)):
-        #         if scripts[i] != subscription_text[i]:
-        #             idx.append(i)
-        #     for j in range(len(subscription_text), len(scripts)):
-        #         idx.append(j)
         return subscription
 
     def getData(self):

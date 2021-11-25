@@ -68,7 +68,7 @@ color:rgb(255, 255, 255)</string>
     <widget class="QPushButton" name="page_button">
      <property name="geometry">
       <rect>
-       <x>1450</x>
+       <x>1500</x>
        <y>695</y>
        <width>50</width>
        <height>40</height>

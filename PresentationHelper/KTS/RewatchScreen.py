@@ -12,8 +12,6 @@ import pyaudio
 import wave
 from Path import Path
 
-from Path import Path
-import time
 
 class RewatchScreen(QMainWindow):
     screen_w = 1600
@@ -40,7 +38,7 @@ class RewatchScreen(QMainWindow):
 class AudioView:
 
     def __init__(self, window, audio_data):
-        from RecordScreen import  CHUNK
+        from RecordScreen import CHUNK
         self.isPlay = True
         self.window = window
         #todo : 이거에 set string 하시면 됩니다.
@@ -79,6 +77,7 @@ class AudioView:
         sub_normal = "font: 20pt \"예스 고딕 레귤러\"; background-color:rgba(0, 0, 0, 125); Color : white"
         
         start = time.time()
+
         while data != b'':
             # 흘러간 시간 측정
             check_time = time.time() - start
@@ -123,7 +122,6 @@ class AudioView:
             # check_time이 PER의 배수가 아닐 경우
             if check_time > sub_n*PER:
                 check_sub_text = False
-
             self.stream.write(data)
             data = self.wf.readframes(self.CHUNK)
 
@@ -188,7 +186,7 @@ class VideoView:
                     face_data_index += 1
 
                 #wait
-                wait_time = interval - (time.time() - time_start) - self.offset
+                wait_time = interval - (time.time() - time_start) - self.offset 
                 if wait_time > 0:
                     time.sleep(wait_time)
             else:

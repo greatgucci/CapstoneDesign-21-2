@@ -34,12 +34,18 @@ PER = 10
 decibels = []
 record_seconds = 30
 
+# 녹음 중지 버튼 누를 시 record_seconds 갱신 위해 필요한 변수
+start = 0
+end = 0
+
 class RecordScreen(QMainWindow):
 
     def __init__(self, controller):
         super(RecordScreen, self).__init__()
         loadUi(Path.path_RecordScreen(), self)
         self.controller = controller
+        # 녹음 중지 버튼을 누를 경우 goto_analyzing으로 이동
+        self.record_stop.clicked.connect(self.goto_analyzing)
 
     # 화면 넘어왔을때 호출되는 함수
     def onload(self):
@@ -57,6 +63,19 @@ class RecordScreen(QMainWindow):
         self.audio.stop()
         self.video.stop()
         self.view.stop()
+        self.controller.setScreen(2)
+
+    def goto_analyzing(self):
+        global record_seconds
+
+        self.audio.stop()
+        self.video.stop()
+        self.view.stop()
+
+        # record_seconds 갱신
+        record_seconds = self.audio.get_during_time()
+        # 갱신값 정확하게 출력됨
+        print(record_seconds)
         self.controller.setScreen(2)
 
 
@@ -95,10 +114,12 @@ class GraphicView:
 # 음성 녹음을 위한 스레드
 class AudioStream:
 
-    global decibels
+    global decibels, record_seconds
 
     def __init__(self, window):
         self.window = window
+        # 추가
+        self.stopped = False
         self.open = True
         self.p = pyaudio.PyAudio()
         self.CHUNK = CHUNK
@@ -120,8 +141,15 @@ class AudioStream:
         self.thread.start()
 
     def record(self):
+        global start
         print("녹음을 시작합니다")
-        for i in range(0, int(self.RATE / self.CHUNK * record_seconds)):
+        start = time.time()
+        # for i in range(0, int(self.RATE / self.CHUNK * record_seconds)):
+        # for문에서 while문으로 변경
+        i = 0
+        while not self.stopped:
+            if i == int(self.RATE / self.CHUNK * record_seconds):
+                break
             data = self.stream.read(CHUNK)
             self.frames.append(data)
             if i % (int(self.RATE / self.CHUNK) * self.DURATION) == 0 and 0 < i < int(self.RATE / self.CHUNK) * record_seconds:
@@ -132,13 +160,17 @@ class AudioStream:
                     # 데시벨 단위로 변환
                     decibel = 20 * math.log(rms, 10)
                     decibels.append(decibel)
+            i += 1
 
         #오디오 녹음이 끝나면, 모두 종료
         self.window.OnAudioRecordEnd()
 
     def stop(self):
         if self.open == True:
+            global end
+            self.stopped = True
             self.open = False
+            end = time.time()
             self.stream.stop_stream()
             self.stream.close()
             self.p.terminate()
@@ -149,6 +181,12 @@ class AudioStream:
             wf.writeframes(b''.join(self.frames))
             wf.close()
         pass
+
+    # 녹화 중지 버튼 눌렀을 때 실제로 걸린 시간
+    def get_during_time(self):
+        global start, end
+        during_time = end - start
+        return int(during_time)
 
 
 # 영상 촬영, 저장을 위한 스레드가 따로 동작
@@ -161,6 +199,7 @@ class VideoStream:
     stopped = False
 
     def __init__(self):
+        # self.camera = cv2.VideoCapture(0)
         self.camera = cv2.VideoCapture(0)
         self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, self.cam_w)
         self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, self.cam_h)

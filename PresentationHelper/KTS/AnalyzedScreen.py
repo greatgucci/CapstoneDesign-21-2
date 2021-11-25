@@ -14,7 +14,7 @@ class AnalyzedScreen(QMainWindow):
         loadUi(Path.path_AnalyzedScreen(), self)
         self.controller = controller
         self.page_button.setText('->')
-        # self.page_button.clicked.connect(self.add_page)
+        self.page_button.clicked.connect(self.add_page)
         self.to_welcome.clicked.connect(self.goto_welcome)
         self.to_rewatch.clicked.connect(self.goto_rewatch)
 
@@ -94,7 +94,10 @@ class AnalyzedScreen(QMainWindow):
         ## 빠르기
         sub_text_temp = ''
         for k in range(len(sound_data[1])):
-            sub_text_temp += sound_data[1][k]
+            if k == 0:
+                sub_text_temp += sound_data[1][k]
+            else:
+                sub_text_temp += ' '+sound_data[1][k]
 
         # 1초 단위 평균
         spm_avg = round(len(sub_text_temp) / record_seconds, 2)
@@ -126,7 +129,8 @@ class AnalyzedScreen(QMainWindow):
                 n += 30-len(sub_text_title)
             # 마지막 줄
             elif m == len(sub_text_temp) // 30 and len(sub_text_temp) % 30 != 0:
-                sub_text += sub_text_temp[len(sub_text_temp) - len(sub_text_temp) % 30:len(sub_text_temp)]+'\n'
+                # len(sub_text_temp) - len(sub_text_temp) % 30
+                sub_text += sub_text_temp[n:len(sub_text_temp)]+'\n'
                 break
             # 그 외
             else:
@@ -137,6 +141,9 @@ class AnalyzedScreen(QMainWindow):
         self.audio_result2.setText(sub_text)
         self.audio_result2.setStyleSheet(sub_normal)
         self.audio_suggestion.setText(volume_suggestion+spm_suggestion+'\n')
+        
+    def add_page(self):
+        print('페이지 추가')
 
     def goto_welcome(self):
         self.controller.setScreen(0)
