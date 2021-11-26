@@ -32,7 +32,7 @@ PER = 10
 
 ## 오디오 녹음에 필요한 전역 변수
 decibels = []
-record_seconds = 30
+record_seconds = 60
 
 # 녹음 중지 버튼 누를 시 record_seconds 갱신 위해 필요한 변수
 start = 0
