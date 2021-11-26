@@ -85,16 +85,18 @@ class AudioView:
             self.window.spm_text_title.setText("빠르기")
 
             # check_time이 DURATION의 배수일 경우
-            if int(check_time) > 0 and int(check_time) % DURATION == 0 and check_vol_text == False and vol_n != (record_seconds // DURATION):
-                vol_text = str((vol_n+1)*DURATION)+'초: '+str(round(self.audio_data[0][vol_n], 1))+'dB\n'
-                audio_text0.setText(vol_text)
-                audio_text0.setStyleSheet(normal)
-                if round(self.audio_data[0][vol_n], 1) < 53.9:
-                    audio_text0.setStyleSheet(highlight_b)
-                elif round(self.audio_data[0][vol_n], 1) > 69.0:
-                    audio_text0.setStyleSheet(highlight_r)
-                check_vol_text = True
-                vol_n += 1
+            if int(check_time) % DURATION == 0 and check_vol_text == False and vol_n != (record_seconds // DURATION):
+                if int(check_time) > 0:
+                    vol_text = str((vol_n+1)*DURATION)+'초: '+str(round(self.audio_data[0][vol_n], 1))+'dB\n'
+                    audio_text0.setText(vol_text)
+                    if round(self.audio_data[0][vol_n], 1) < 53.9:
+                        audio_text0.setStyleSheet(highlight_b)
+                    elif round(self.audio_data[0][vol_n], 1) > 69.0:
+                        audio_text0.setStyleSheet(highlight_r)
+                    else:
+                        audio_text0.setStyleSheet(normal)
+                    check_vol_text = True
+                    vol_n += 1
             # check_time이 DURATION의 배수가 아닐 경우
             if check_time > (vol_n+1)*DURATION:
                 check_vol_text = False

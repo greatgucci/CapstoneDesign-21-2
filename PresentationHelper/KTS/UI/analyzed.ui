@@ -65,7 +65,7 @@ color:rgb(255, 255, 255)</string>
      </property>
     </widget>
     <!-- 버튼 추가 -->
-    <widget class="QPushButton" name="page_button">
+    <widget class="QPushButton" name="add_page">
      <property name="geometry">
       <rect>
        <x>1500</x>
@@ -81,7 +81,7 @@ font: 12pt &quot;예스 고딕 레귤러&quot;;
 color:rgb(255, 255, 255);</string>
      </property>
      <property name="text">
-      <string><b>-></b></string>
+      <string>-></string>
      </property>
     </widget>
     <widget class="QPushButton" name="to_welcome">

@@ -13,8 +13,7 @@ class AnalyzedScreen(QMainWindow):
         super(AnalyzedScreen, self).__init__()
         loadUi(Path.path_AnalyzedScreen(), self)
         self.controller = controller
-        self.page_button.setText('->')
-        self.page_button.clicked.connect(self.add_page)
+        self.add_page.clicked.connect(self.goto_next_page)
         self.to_welcome.clicked.connect(self.goto_welcome)
         self.to_rewatch.clicked.connect(self.goto_rewatch)
 
@@ -142,9 +141,9 @@ class AnalyzedScreen(QMainWindow):
         self.audio_result2.setStyleSheet(sub_normal)
         self.audio_suggestion.setText(volume_suggestion+spm_suggestion+'\n')
         
-    def add_page(self):
+    def goto_next_page(self):
         # page 넘김 추가
-        pass
+        self.controller.setScreen(4)
 
     def goto_welcome(self):
         self.controller.setScreen(0)
