@@ -16,9 +16,9 @@ import wave
 import math
 from Path import Path
 
+from keras_preprocessing.image import img_to_array
 
 ## 오디오 녹음에 필요한 상수
-from keras_preprocessing.image import img_to_array
 CHUNK = 512
 # 16bit는 각 샘플의 크기
 FORMAT = pyaudio.paInt16
@@ -28,11 +28,15 @@ RATE = 22050
 # 데시벨, 템포 기준 초
 DURATION = 5
 # 음성 인식 기준 초
-PER = 14
+PER = 10
 
 ## 오디오 녹음에 필요한 전역 변수
 decibels = []
 record_seconds = 30
+
+# 녹음 중지 버튼 누를 시 record_seconds 갱신 위해 필요한 변수
+start = 0
+end = 0
 
 class RecordScreen(QMainWindow):
 
@@ -40,6 +44,8 @@ class RecordScreen(QMainWindow):
         super(RecordScreen, self).__init__()
         loadUi(Path.path_RecordScreen(), self)
         self.controller = controller
+        # 녹음 중지 버튼을 누를 경우 goto_analyzing으로 이동
+        self.record_stop.clicked.connect(self.goto_analyzing)
 
     # 화면 넘어왔을때 호출되는 함수
     def onload(self):
@@ -57,6 +63,19 @@ class RecordScreen(QMainWindow):
         self.audio.stop()
         self.video.stop()
         self.view.stop()
+        self.controller.setScreen(2)
+
+    def goto_analyzing(self):
+        global record_seconds
+
+        self.audio.stop()
+        self.video.stop()
+        self.view.stop()
+
+        # record_seconds 갱신
+        record_seconds = self.audio.get_during_time()
+        # 갱신값 정확하게 출력됨
+        print(record_seconds)
         self.controller.setScreen(2)
 
 
@@ -95,10 +114,12 @@ class GraphicView:
 # 음성 녹음을 위한 스레드
 class AudioStream:
 
-    global decibels
+    global decibels, record_seconds
 
     def __init__(self, window):
         self.window = window
+        # 추가
+        self.stopped = False
         self.open = True
         self.p = pyaudio.PyAudio()
         self.CHUNK = CHUNK
@@ -120,34 +141,36 @@ class AudioStream:
         self.thread.start()
 
     def record(self):
+        global start
         print("녹음을 시작합니다")
-        for i in range(0, int(self.RATE / self.CHUNK * record_seconds)):
+        start = time.time()
+        # for i in range(0, int(self.RATE / self.CHUNK * record_seconds)):
+        # for문에서 while문으로 변경
+        i = 0
+        while not self.stopped:
+            if i == int(self.RATE / self.CHUNK * record_seconds):
+                break
             data = self.stream.read(CHUNK)
             self.frames.append(data)
-            # print(i)
             if i % (int(self.RATE / self.CHUNK) * self.DURATION) == 0 and 0 < i < int(self.RATE / self.CHUNK) * record_seconds:
                 # 볼륨 체크
                 # 2는 sampling width in byte 
                 rms = audioop.rms(data,2)
-                #rms 0보다 클 경우
                 if(rms > 0):
                     # 데시벨 단위로 변환
                     decibel = 20 * math.log(rms, 10)
                     decibels.append(decibel)
+            i += 1
 
         #오디오 녹음이 끝나면, 모두 종료
         self.window.OnAudioRecordEnd()
 
     def stop(self):
-        # start_time = time.time()
-        # end_time = time.time()
-        # remain_time = record_seconds - int(end_time-start_time)
-        # delete_time = remain_time // PER
-        # print(remain_time)
-        # if delete_time > 0 :
-        #     frames = frames[:-(int(RATE / CHUNK)*PER*delete_time)]
         if self.open == True:
+            global end
+            self.stopped = True
             self.open = False
+            end = time.time()
             self.stream.stop_stream()
             self.stream.close()
             self.p.terminate()
@@ -158,6 +181,12 @@ class AudioStream:
             wf.writeframes(b''.join(self.frames))
             wf.close()
         pass
+
+    # 녹화 중지 버튼 눌렀을 때 실제로 걸린 시간
+    def get_during_time(self):
+        global start, end
+        during_time = end - start
+        return int(during_time)
 
 
 # 영상 촬영, 저장을 위한 스레드가 따로 동작
@@ -170,6 +199,7 @@ class VideoStream:
     stopped = False
 
     def __init__(self):
+        # self.camera = cv2.VideoCapture(0)
         self.camera = cv2.VideoCapture(0)
         self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, self.cam_w)
         self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, self.cam_h)

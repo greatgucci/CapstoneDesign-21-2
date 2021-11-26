@@ -7,14 +7,12 @@ from threading import Thread
 from PyQt5 import QtGui
 from AnalyzingScreen import FaceData
 
-## 오디오 리플레이
+## 오디오 
 import pyaudio
 import wave
 from Path import Path
 
-from Path import Path
-# 수정
-import time
+
 class RewatchScreen(QMainWindow):
     screen_w = 1600
     screen_h = 900
@@ -40,14 +38,10 @@ class RewatchScreen(QMainWindow):
 class AudioView:
 
     def __init__(self, window, audio_data):
-        from RecordScreen import  CHUNK, DURATION
+        from RecordScreen import CHUNK
         self.isPlay = True
         self.window = window
         #todo : 이거에 set string 하시면 됩니다.
-        self.audio_text = window.audio_text 
-        self.audio_tempo_text = window.audio_tempo_text 
-        self.audio_sub_text = window.audio_sub_text
-
         self.audio_data = audio_data
 
         self.open = True
@@ -62,69 +56,84 @@ class AudioView:
                         rate=self.wf.getframerate(),
                         output=True)
 
-        self.start = 0
         self.viewThread = Thread(target=self.play, args=())
         self.viewThread.start()
 
     def play(self):
         from RecordScreen import  DURATION, PER, record_seconds
-        
-        self.start = time.time()
-        data = self.wf.readframes(self.CHUNK)
 
-        # 수정
-        text = ''
-        sub_text = ''
-        tempo_text = ''
-        n = 0
+        audio_text0 = self.window.audio_text0
+        audio_text1 = self.window.audio_text1 
+        audio_text2 = self.window.audio_text2
+        
+        data = self.wf.readframes(self.CHUNK)
+        vol_n = 0
         sub_n = 0
-        check_text = False
+        check_vol_text = False
         check_sub_text = False
+        highlight_r = "font: 16pt \"예스 고딕 레귤러\"; background-color:rgba(0, 0, 0, 125); Color : red"
+        highlight_b = "font: 16pt \"예스 고딕 레귤러\"; background-color:rgba(0, 0, 0, 125); Color : skyblue"
+        normal = "font: 16pt \"예스 고딕 레귤러\"; background-color:rgba(0, 0, 0, 125); Color : white"
+        sub_normal = "font: 20pt \"예스 고딕 레귤러\"; background-color:rgba(0, 0, 0, 125); Color : white"
+        
+        start = time.time()
+
         while data != b'':
             # 흘러간 시간 측정
-            check_time = time.time() - self.start
-            
-            # check_time이 5의 배수일 경우
-            if check_time > 0 and int(check_time) % DURATION == 0 and check_text == False and n != (record_seconds // DURATION):
-                text = str((n+1)*DURATION)+'초'+'\n'
-                text += '볼륨: '+str(round(self.audio_data[0][n], 1))+'dB'+'\n'
-                self.audio_text.setText(text)
-                self.audio_text.update()
-                check_text = True
-                n += 1
-                
-            # check_time이 5의 배수가 아닐 경우
-            if check_time > (n+1)*DURATION:
-                check_text = False
-            # check_time이 14의 배수일 경우
+            check_time = time.time() - start
+            self.window.volume_text_title.setText("볼륨")
+            self.window.spm_text_title.setText("빠르기")
+
+            # check_time이 DURATION의 배수일 경우
+            if int(check_time) % DURATION == 0 and check_vol_text == False and vol_n != (record_seconds // DURATION):
+                if int(check_time) > 0:
+                    vol_text = str((vol_n+1)*DURATION)+'초: '+str(round(self.audio_data[0][vol_n], 1))+'dB\n'
+                    audio_text0.setText(vol_text)
+                    if round(self.audio_data[0][vol_n], 1) < 53.9:
+                        audio_text0.setStyleSheet(highlight_b)
+                    elif round(self.audio_data[0][vol_n], 1) > 69.0:
+                        audio_text0.setStyleSheet(highlight_r)
+                    else:
+                        audio_text0.setStyleSheet(normal)
+                    check_vol_text = True
+                    vol_n += 1
+            # check_time이 DURATION의 배수가 아닐 경우
+            if check_time > (vol_n+1)*DURATION:
+                check_vol_text = False
+
+            # check_time이 PER의 배수일 경우
             if int(check_time) % PER == 0 and check_sub_text == False:
-                tempo_text = str((sub_n+1)*PER)+'초'+'\n'
                 if check_time > 0:
-                    tempo_text += '빠르기: '+str(round(self.audio_data[2][n], 2))+'\n'
-                    self.audio_tempo_text.setText(tempo_text)
-                    self.audio_tempo_text.update()
-                sub_text = self.audio_data[1][sub_n]
-                self.audio_sub_text.setText(sub_text)
-                self.audio_sub_text.update()
+                    tempo_text = str((sub_n)*PER)+'초: '+str(round(self.audio_data[2][sub_n-1], 2))+'\n'
+                    audio_text1.setText(tempo_text)
+                    audio_text1.setStyleSheet(normal)
+                    if round(self.audio_data[0][sub_n], 1) < 5.33:
+                        audio_text1.setStyleSheet(highlight_b)
+                    elif round(self.audio_data[0][sub_n], 1) > 6.33:
+                        audio_text1.setStyleSheet(highlight_r)
+                if sub_n > record_seconds // PER:
+                    sub_text = self.audio_data[1][-1]
+                else:
+                    sub_text = self.audio_data[1][sub_n]
+                if len(sub_text)>= 50:
+                    sub_text = sub_text[:50]+'\n'+sub_text[50:]
+                audio_text2.setText(sub_text)
+                audio_text2.setStyleSheet(sub_normal)
                 check_sub_text = True
                 sub_n += 1
-                
-            # check_time이 514의 배수가 아닐 경우
-            if check_time > (n+1)*DURATION:
+            # check_time이 PER의 배수가 아닐 경우
+            if check_time > sub_n*PER:
                 check_sub_text = False
-            
             self.stream.write(data)
             data = self.wf.readframes(self.CHUNK)
 
         self.stream.stop_stream()
         self.stream.close()
-        print(self.audio_data[1])
         self.p.terminate()
         self.isPlay = False
         self.window.on_stream_end()
-        # print('걸린 시간: ')
-        # print(time.time()-self.start)
 
+        
 
 #영상 출력 스레드
 class VideoView:
@@ -179,7 +188,7 @@ class VideoView:
                     face_data_index += 1
 
                 #wait
-                wait_time = interval - (time.time() - time_start) - self.offset
+                wait_time = interval - (time.time() - time_start) - self.offset 
                 if wait_time > 0:
                     time.sleep(wait_time)
             else:

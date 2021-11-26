@@ -7,7 +7,6 @@ from PyQt5.uic import loadUi
 from keras.preprocessing.image import img_to_array
 
 ## 오디오 분석
-import librosa
 import base64
 import urllib3
 import json
@@ -16,8 +15,7 @@ from PyQt5.QtWidgets import QMainWindow
 from Path import Path
 from pydub import AudioSegment
 
-
-## 전역 변수
+## 오디오 분석 전역 변수
 openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/Recognition"
 accessKey = "62dbdbd8-e605-4035-a608-fb4563c92888"
 languageCode = "korean"
@@ -46,9 +44,10 @@ class AnalyzingScreen(QMainWindow):
 
         while self.audioAnalyzer.isAnalyzing:
             pass
-
+        
         self.controller.video_analyze_data = self.videoAnalyzer.getData()
         self.controller.sound_analyze_data = self.audioAnalyzer.getData()
+        
         self.goto_analyzed()
 
     def goto_analyzed(self):
@@ -118,43 +117,28 @@ class AudioAnalyzer:
 
         from RecordScreen import decibels
         print("audio analyze start\n")
-        # decibels를 data에 저장
+        # 볼륨 분석 결과 저장
         self.data.append(decibels)
-        # get_subscription 결과 data에 저장
+        # 음성 인식 결과 저장
         self.data.append(self.get_subscription())
-        # tempo_analysis 결과 data에 저장
+        # 빠르기 분석 결과 저장
         self.data.append(self.tempo_analysis())
+        # print(self.data)
         print("audio analyze end\n")
         self.isAnalyzing = False
 
-
-    # todo : 최주연님, 녹화된 음성 분석
-    # 빠르기 분석
+    ## 녹화된 음성 분석
     def tempo_analysis(self):
+        from RecordScreen import PER
 
         global subscription
-        from RecordScreen import DURATION, PER, record_seconds
 
-        # tempos = []
-        # if record_seconds % DURATION == 0:
-        #     per_duration = record_seconds // DURATION - 1
-        # else:
-        #     per_duration = (record_seconds // DURATION)
-
-        # for i in range(per_duration):
-        #     y, sr = librosa.load(Path.path_SoundOuput(), offset=DURATION * i, duration=DURATION, sr=16000)
-        #     onset_env = librosa.onset.onset_strength(y, sr=sr, aggregate=np.median)
-        #     tempo, beats = librosa.beat.beat_track(onset_envelope=onset_env, sr=sr)
-        #     tempos.append(tempo)
-
-        # return tempos
-        spm_per_sec_analysis = []
+        spm_per_sec = []
         for i in range(len(subscription)):
-            spm_per_sec_analysis.append(round(len(subscription[i])/PER, 2))
-        return spm_per_sec_analysis
+            # 평균값으로 초당 빠르기 분석
+            spm_per_sec.append(len(subscription[i])/PER)
+        return spm_per_sec
 
-    # todo : 최주연님, 녹화된 음성 분석
-    # 음성 인식 함수
     def get_subscription(self):
         from RecordScreen import PER, record_seconds
 
@@ -164,9 +148,9 @@ class AudioAnalyzer:
         repeat = record_seconds // PER
         if record_seconds % PER != 0:
             repeat += 1
-
         for i in range(repeat):
-            t = 1000 * PER  # per sec
+            # ms -> s
+            t = 1000 * PER  
             new_audio = AudioSegment.from_wav(Path.path_SoundOuput())
 
             # 원본 wav 파일 나누기
@@ -207,6 +191,7 @@ class AudioAnalyzer:
 
             data = json.loads(response.data.decode("utf-8", errors='ignore'))
             subscription.append(data['return_object']['recognized'])
+        
         return subscription
 
     def getData(self):
