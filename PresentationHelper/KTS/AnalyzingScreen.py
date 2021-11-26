@@ -39,7 +39,7 @@ class AnalyzingScreen(QMainWindow):
 
     def start_analyze(self):
         #분석 속도 개선을 위해 thread 분리
-        self.audioAnalyzer = AudioAnalyzer()
+        self.audioAnalyzer = AudioAnalyzer(self.controller.record_second)
         self.videoAnalyzer = VideoAnalyzer()
 
         while self.audioAnalyzer.isAnalyzing:
@@ -107,8 +107,9 @@ class FaceData:
 
 class AudioAnalyzer:
 
-    def __init__(self):
+    def __init__(self,record_seconds):
         self.isAnalyzing = True
+        self.record_seconds = record_seconds
         self.data = []
         self.thread = threading.Thread(target=self.analyzeAudio, args=())
         self.thread.start()
@@ -140,13 +141,13 @@ class AudioAnalyzer:
         return spm_per_sec
 
     def get_subscription(self):
-        from RecordScreen import PER, record_seconds
+        from RecordScreen import PER
 
         global splited_wavefile, subscription
 
         # 원본 wav파일 나누는 횟수
-        repeat = record_seconds // PER
-        if record_seconds % PER != 0:
+        repeat = self.record_seconds // PER
+        if self.record_seconds % PER != 0:
             repeat += 1
         for i in range(repeat):
             # ms -> s
@@ -155,8 +156,8 @@ class AudioAnalyzer:
 
             # 원본 wav 파일 나누기
             if i == repeat - 1:
-                if repeat != record_seconds // PER:
-                    new_audio = new_audio[t * i:t * i + (record_seconds % PER) * 1000]
+                if repeat != self.record_seconds // PER:
+                    new_audio = new_audio[t * i:t * i + (self.record_seconds % PER) * 1000]
                 else:
                     new_audio = new_audio[t * i:t * i * 2 + 1]
             else:
