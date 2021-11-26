@@ -8,6 +8,7 @@ from Path import Path
 #texts : audio_result,audio_suggestion,video_result,video_suggestion
 #buttons : to_rewatch,to_welcome, page_button
 
+page_max = 1
 page = 1
 sub_text_temp = ''
 sub_text_temp_for_back= []
@@ -71,7 +72,7 @@ class AnalyzedScreen(QMainWindow):
     def print_audio_data(self, sound_data):
         from RecordScreen import PER, record_seconds
 
-        global page, sub_text_temp, sub_text_temp_for_back
+        global page, sub_text_temp, sub_text_temp_for_back, page_next, page_back, page_max
 
         highlight_r = "font: 20pt \"예스 고딕 레귤러\"; Color : red"
         highlight_b = "font: 20pt \"예스 고딕 레귤러\"; Color : skyblue"
@@ -130,10 +131,10 @@ class AnalyzedScreen(QMainWindow):
         m = 0
         n = 0
         if len(sub_text_temp) % 290 == 0:
-            page += len(sub_text_temp) // 290 - 1
+            page_max += len(sub_text_temp) // 290 - 1
         else:
-            page += len(sub_text_temp) // 290 
-        if page > 1:
+            page_max += len(sub_text_temp) // 290 
+        if page_max > 1:
             sub_text_per_page = sub_text_temp[:290]
             sub_text_temp = sub_text_temp[290:]
         # 30은 ui의 width와 매칭되는 글자수
@@ -160,56 +161,58 @@ class AnalyzedScreen(QMainWindow):
         self.audio_suggestion.setText(volume_suggestion+spm_suggestion+'\n')
         
     def goto_next_page(self):
-        global page, sub_text_temp, sub_text_temp_for_back
+        global page, sub_text_temp, sub_text_temp_for_back, page_next
 
         sub_normal = "font: 20pt \"예스 고딕 레귤러\"; Color : white"
 
-        page_next = page
         n = 0
         m = 0
         sub_text = '음성 인식: '
         sub_text_title = sub_text
 
+        # if page == page_max:
+        #     self.add_page.hide()
 
-        if page_next > 1:
+        if page_max > 1:
             sub_text_per_page = sub_text_temp[:290]
             sub_text_temp = sub_text_temp[290:]
-        # 30은 ui의 width와 매칭되는 글자수
-        if page_next >= 1:
-            while True:
-                # 첫번째 줄
-                if m == 0:
-                    sub_text += sub_text_per_page[0:30-len(sub_text_title)]+'\n'
+            # 30은 ui의 width와 매칭되는 글자수
+            print(sub_text_per_page)
+            print(sub_text_temp)
+            if page >= 1:
+                while True:
+                    # 첫번째 줄
+                    if m == 0:
+                        sub_text += sub_text_per_page[0:30-len(sub_text_title)]+'\n'
+                        n += 30-len(sub_text_title)
+                    # 마지막 줄
+                    # and len(sub_text_temp) % 30 != 0
+                    elif m == len(sub_text_per_page) // 30:
+                        # len(sub_text_temp) - len(sub_text_temp) % 30
+                        sub_text += sub_text_per_page[n:len(sub_text_per_page)]
+                        break
+                    # 그 외
+                    else:
+                        sub_text += sub_text_per_page[n:n+30]+'\n'
+                        n += 30
+                    m += 1
+                page += 1
+                sub_text_temp_for_back.append(sub_text)
+                self.audio_result2.setText(sub_text)
+                self.audio_result2.setStyleSheet(sub_normal)
+            else:
+                pass
 
-                    n += 30-len(sub_text_title)
-                # 마지막 줄
-                # and len(sub_text_temp) % 30 != 0
-                elif m == len(sub_text_per_page) // 30:
-                    # len(sub_text_temp) - len(sub_text_temp) % 30
-                    sub_text += sub_text_per_page[n:len(sub_text_per_page)]
-                    break
-                # 그 외
-                else:
-                    sub_text += sub_text_per_page[n:n+30]+'\n'
-                    n += 30
-                m += 1
-            page_next -= 1
-            sub_text_temp_for_back.append(sub_text)
-            self.audio_result2.setText(sub_text)
-            self.audio_result2.setStyleSheet(sub_normal)
-
-        else:
-            pass
     def goto_back_page(self):
         global page, sub_text_temp_for_back
         sub_normal = "font: 20pt \"예스 고딕 레귤러\"; Color : white"
 
-        n = len(sub_text_temp_for_back)-1
-        if n >= 1:
-            self.audio_result2.setText(sub_text_temp_for_back[n-1])
+        # if page == 1:
+        #     self.back_page.hide()
+        if page - 1 >= 1:
+            self.audio_result2.setText(sub_text_temp_for_back[page-2])
             self.audio_result2.setStyleSheet(sub_normal)
-            n -= 1
-
+            page -= 1
         else:
             pass
 
