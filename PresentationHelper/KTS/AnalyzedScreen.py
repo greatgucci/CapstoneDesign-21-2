@@ -13,11 +13,18 @@ page = 1
 sub_text_temp = ''
 sub_text_temp_for_back= []
 
+
 class AnalyzedScreen(QMainWindow):
 
     def __init__(self, controller):
         super(AnalyzedScreen, self).__init__()
         loadUi(Path.path_AnalyzedScreen(), self)
+
+        if page == 1:
+            self.back_page.hide()
+        else:
+            self.back_page.show()
+
         self.controller = controller
         self.add_page.clicked.connect(self.goto_next_page)
         self.back_page.clicked.connect(self.goto_back_page)
@@ -30,6 +37,18 @@ class AnalyzedScreen(QMainWindow):
         self.print_video_data(self.controller.video_analyze_data)
         self.print_audio_data(self.controller.sound_analyze_data)
         # todo : 영상 분석한 결과 출력
+
+    def back_page_visible(self, back_page):
+        if page == 1:
+            back_page.hide()
+        else:
+            back_page.show()
+
+    def add_page_visible(self, add_page):
+        if page == page_max and page != 1:
+            add_page.hide()
+        else:
+            add_page.show()
 
     def print_video_data(self, video_data):
         result = []
@@ -72,7 +91,7 @@ class AnalyzedScreen(QMainWindow):
     def print_audio_data(self, sound_data):
         from RecordScreen import PER, record_seconds
 
-        global page, sub_text_temp, sub_text_temp_for_back, page_next, page_back, page_max
+        global page, sub_text_temp, sub_text_temp_for_back, page_max
 
         highlight_r = "font: 20pt \"예스 고딕 레귤러\"; Color : red"
         highlight_b = "font: 20pt \"예스 고딕 레귤러\"; Color : skyblue"
@@ -161,7 +180,7 @@ class AnalyzedScreen(QMainWindow):
         self.audio_suggestion.setText(volume_suggestion+spm_suggestion+'\n')
         
     def goto_next_page(self):
-        global page, sub_text_temp, sub_text_temp_for_back, page_next
+        global page, sub_text_temp, sub_text_temp_for_back
 
         sub_normal = "font: 20pt \"예스 고딕 레귤러\"; Color : white"
 
@@ -170,16 +189,13 @@ class AnalyzedScreen(QMainWindow):
         sub_text = '음성 인식: '
         sub_text_title = sub_text
 
-        # if page == page_max:
-        #     self.add_page.hide()
 
         if page_max > 1:
             sub_text_per_page = sub_text_temp[:290]
             sub_text_temp = sub_text_temp[290:]
             # 30은 ui의 width와 매칭되는 글자수
-            print(sub_text_per_page)
-            print(sub_text_temp)
             if page >= 1:
+                
                 while True:
                     # 첫번째 줄
                     if m == 0:
@@ -197,9 +213,12 @@ class AnalyzedScreen(QMainWindow):
                         n += 30
                     m += 1
                 page += 1
+                
                 sub_text_temp_for_back.append(sub_text)
                 self.audio_result2.setText(sub_text)
                 self.audio_result2.setStyleSheet(sub_normal)
+                self.add_page_visible(self.add_page)
+                self.back_page_visible(self.back_page)
             else:
                 pass
 
@@ -207,14 +226,15 @@ class AnalyzedScreen(QMainWindow):
         global page, sub_text_temp_for_back
         sub_normal = "font: 20pt \"예스 고딕 레귤러\"; Color : white"
 
-        # if page == 1:
-        #     self.back_page.hide()
-        if page - 1 >= 1:
+        if page > 1:
             self.audio_result2.setText(sub_text_temp_for_back[page-2])
             self.audio_result2.setStyleSheet(sub_normal)
             page -= 1
+            self.add_page_visible(self.add_page)
+            self.back_page_visible(self.back_page)
         else:
             pass
+
 
     def goto_welcome(self):
         self.controller.setScreen(0)
