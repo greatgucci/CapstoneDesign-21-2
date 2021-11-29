@@ -95,7 +95,7 @@ class AnalyzedScreen(QMainWindow):
         highlight_r = "font: 20pt \"예스 고딕 레귤러\"; Color : red"
         highlight_b = "font: 20pt \"예스 고딕 레귤러\"; Color : skyblue"
         normal = "font: 20pt \"예스 고딕 레귤러\"; Color : white"
-        sub_normal = "font: 20pt \"예스 고딕 레귤러\"; Color : white"
+        sub_normal = "font: 19pt \"예스 고딕 레귤러\"; Color : white"
 
         ## 볼륨
         volume_sum = 0.0
