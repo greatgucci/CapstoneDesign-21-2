@@ -12,7 +12,7 @@ from AnalyzedScreen import AnalyzedScreen
 class Controller:
     video_analyze_data = []
     sound_analyze_data = []
-    record_second = 30
+    record_second = 0
 
     def __init__(self, mainwidget):
         self.mainWidget = mainwidget

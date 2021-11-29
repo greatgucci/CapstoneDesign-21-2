@@ -27,7 +27,7 @@ class RewatchScreen(QMainWindow):
         print("RewatchScreen Loaded")
         self.streaming = 0
         self.videoView = VideoView(self, self.controller.video_analyze_data)
-        self.audioView = AudioView(self, self.controller.sound_analyze_data,self.controller.record_second)
+        self.audioView = AudioView(self, self.controller.sound_analyze_data, self.controller.record_second)
 
     def on_stream_end(self):
         if not self.videoView.isPlay and not self.audioView.isPlay:
@@ -37,7 +37,7 @@ class RewatchScreen(QMainWindow):
 #오디오 출력 스레드
 class AudioView:
 
-    def __init__(self, window, audio_data,record_seconds):
+    def __init__(self, window, audio_data, record_seconds):
         from RecordScreen import CHUNK
         self.isPlay = True
         self.window = window

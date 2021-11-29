@@ -7,13 +7,27 @@ from Path import Path
 #UI
 #texts : audio_result,audio_suggestion,video_result,video_suggestion
 #buttons : to_rewatch,to_welcome, page_button
+
+page_max = 1
+page = 1
+sub_text_temp = ''
+sub_text_temp_for_back= []
+
+
 class AnalyzedScreen(QMainWindow):
 
     def __init__(self, controller):
         super(AnalyzedScreen, self).__init__()
         loadUi(Path.path_AnalyzedScreen(), self)
+
+        if page == 1:
+            self.back_page.hide()
+        else:
+            self.back_page.show()
+
         self.controller = controller
         self.add_page.clicked.connect(self.goto_next_page)
+        self.back_page.clicked.connect(self.goto_back_page)
         self.to_welcome.clicked.connect(self.goto_welcome)
         self.to_rewatch.clicked.connect(self.goto_rewatch)
 
@@ -23,6 +37,18 @@ class AnalyzedScreen(QMainWindow):
         self.print_video_data(self.controller.video_analyze_data)
         self.print_audio_data(self.controller.sound_analyze_data,self.controller.record_second)
         # todo : 영상 분석한 결과 출력
+
+    def back_page_visible(self, back_page):
+        if page == 1:
+            back_page.hide()
+        else:
+            back_page.show()
+
+    def add_page_visible(self, add_page):
+        if page == page_max and page != 1:
+            add_page.hide()
+        else:
+            add_page.show()
 
     def print_video_data(self, video_data):
         result = []
@@ -62,7 +88,10 @@ class AnalyzedScreen(QMainWindow):
 
 
     # 오디오 분석 결과 유저에게 전달하는 함수
-    def print_audio_data(self, sound_data,record_seconds):
+    def print_audio_data(self, sound_data, record_seconds):
+
+        global page, sub_text_temp, sub_text_temp_for_back, page_max
+
         highlight_r = "font: 20pt \"예스 고딕 레귤러\"; Color : red"
         highlight_b = "font: 20pt \"예스 고딕 레귤러\"; Color : skyblue"
         normal = "font: 20pt \"예스 고딕 레귤러\"; Color : white"
@@ -95,6 +124,7 @@ class AnalyzedScreen(QMainWindow):
                 sub_text_temp += sound_data[1][k]
             else:
                 sub_text_temp += ' '+sound_data[1][k]
+        
 
         # 1초 단위 평균
         spm_avg = round(len(sub_text_temp) / record_seconds, 2)
@@ -118,30 +148,99 @@ class AnalyzedScreen(QMainWindow):
         sub_text_title = sub_text
         m = 0
         n = 0
+        if len(sub_text_temp) % 290 == 0:
+            page_max += len(sub_text_temp) // 290 - 1
+            if page_max > 1:
+                sub_text_per_page = sub_text_temp[:290]
+                sub_text_temp = sub_text_temp[290:]
+            else:
+                sub_text_per_page = sub_text_temp
+        else:
+            page_max += len(sub_text_temp) // 290 
+            if page_max > 1:
+                sub_text_per_page = sub_text_temp[:290]
+                sub_text_temp = sub_text_temp[290:]
+            else:
+                sub_text_per_page = sub_text_temp
         # 30은 ui의 width와 매칭되는 글자수
         while True:
             # 첫번째 줄
             if m == 0:
-                sub_text += sub_text_temp[0:30-len(sub_text_title)]+'\n'
+                sub_text += sub_text_per_page[0:30-len(sub_text_title)]+'\n'
                 n += 30-len(sub_text_title)
             # 마지막 줄
-            elif m == len(sub_text_temp) // 30 and len(sub_text_temp) % 30 != 0:
+            # and len(sub_text_temp) % 30 != 0
+            elif m == len(sub_text_per_page) // 30:
                 # len(sub_text_temp) - len(sub_text_temp) % 30
-                sub_text += sub_text_temp[n:len(sub_text_temp)]+'\n'
+                sub_text += sub_text_per_page[n:len(sub_text_per_page)]
                 break
             # 그 외
             else:
-                sub_text += sub_text_temp[n:n+30]+'\n'
+                sub_text += sub_text_per_page[n:n+30]+'\n'
                 n += 30
             m += 1
+        sub_text_temp_for_back.append(sub_text)
 
         self.audio_result2.setText(sub_text)
         self.audio_result2.setStyleSheet(sub_normal)
         self.audio_suggestion.setText(volume_suggestion+spm_suggestion+'\n')
         
     def goto_next_page(self):
-        # page 넘김 추가
-        self.controller.setScreen(4)
+        global page, sub_text_temp, sub_text_temp_for_back
+
+        sub_normal = "font: 20pt \"예스 고딕 레귤러\"; Color : white"
+
+        n = 0
+        m = 0
+        sub_text = '음성 인식: '
+        sub_text_title = sub_text
+
+
+        if page_max > 1:
+            sub_text_per_page = sub_text_temp[:290]
+            sub_text_temp = sub_text_temp[290:]
+            # 30은 ui의 width와 매칭되는 글자수
+            if page >= 1:
+                
+                while True:
+                    # 첫번째 줄
+                    if m == 0:
+                        sub_text += sub_text_per_page[0:30-len(sub_text_title)]+'\n'
+                        n += 30-len(sub_text_title)
+                    # 마지막 줄
+                    # and len(sub_text_temp) % 30 != 0
+                    elif m == len(sub_text_per_page) // 30:
+                        # len(sub_text_temp) - len(sub_text_temp) % 30
+                        sub_text += sub_text_per_page[n:len(sub_text_per_page)]
+                        break
+                    # 그 외
+                    else:
+                        sub_text += sub_text_per_page[n:n+30]+'\n'
+                        n += 30
+                    m += 1
+                page += 1
+                
+                sub_text_temp_for_back.append(sub_text)
+                self.audio_result2.setText(sub_text)
+                self.audio_result2.setStyleSheet(sub_normal)
+                self.add_page_visible(self.add_page)
+                self.back_page_visible(self.back_page)
+            else:
+                pass
+
+    def goto_back_page(self):
+        global page, sub_text_temp_for_back
+        sub_normal = "font: 20pt \"예스 고딕 레귤러\"; Color : white"
+
+        if page > 1:
+            self.audio_result2.setText(sub_text_temp_for_back[page-2])
+            self.audio_result2.setStyleSheet(sub_normal)
+            page -= 1
+            self.add_page_visible(self.add_page)
+            self.back_page_visible(self.back_page)
+        else:
+            pass
+
 
     def goto_welcome(self):
         self.controller.setScreen(0)

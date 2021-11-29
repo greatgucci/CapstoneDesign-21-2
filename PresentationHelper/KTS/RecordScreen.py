@@ -15,7 +15,8 @@ import audioop
 import wave
 import math
 
-from KTS.WelcomeScreen import WelcomeScreen
+# from KTS.WelcomeScreen import WelcomeScreen
+import WelcomeScreen
 from Path import Path
 
 from keras_preprocessing.image import img_to_array
@@ -60,10 +61,13 @@ class RecordScreen(QMainWindow):
         self.view.stop()
         self.controller.setScreen(2)
 
+    # 삭제 안됨
     def goto_analyzing(self):
+
         self.audio.stop()
         self.video.stop()
         self.view.stop()
+
         self.controller.setScreen(2)
 
 
@@ -104,11 +108,12 @@ class AudioStream:
 
     global decibels
 
-    def __init__(self, window,record_seconds):
+    def __init__(self, window, record_seconds):
         self.window = window
         self.record_seconds = record_seconds
-        # 추가
+        # 삭제 안됨
         self.stopped = False
+
         self.open = True
         self.p = pyaudio.PyAudio()
         self.CHUNK = CHUNK
@@ -131,11 +136,13 @@ class AudioStream:
 
     def record(self):
         print("녹음을 시작합니다")
-
+        # for i in range(0, int(self.RATE / self.CHUNK * self.record_seconds)):
+        # 삭제 안됨
         i = 0
         while not self.stopped:
             if i == int(self.RATE / self.CHUNK * self.record_seconds):
                 break
+
             data = self.stream.read(CHUNK)
             self.frames.append(data)
             if i % (int(self.RATE / self.CHUNK) * self.DURATION) == 0 and 0 < i < int(self.RATE / self.CHUNK) * self.record_seconds:
@@ -146,6 +153,7 @@ class AudioStream:
                     # 데시벨 단위로 변환
                     decibel = 20 * math.log(rms, 10)
                     decibels.append(decibel)
+            # 삭제 안됨
             i += 1
 
         #오디오 녹음이 끝나면, 모두 종료
@@ -153,8 +161,10 @@ class AudioStream:
 
     def stop(self):
         if self.open == True:
+            # 삭제 안됨
             self.stopped = True
             self.open = False
+            
             self.stream.stop_stream()
             self.stream.close()
             self.p.terminate()
@@ -165,6 +175,7 @@ class AudioStream:
             wf.writeframes(b''.join(self.frames))
             wf.close()
         pass
+
 
 # 영상 촬영, 저장을 위한 스레드가 따로 동작
 class VideoStream:

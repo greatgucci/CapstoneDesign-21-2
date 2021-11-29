@@ -41,3 +41,4 @@ class Path:
         return Path.resource_path('files/haarcascade_frontalface_default.xml')
     def path_SoundDistributedFile(per,i):
         return Path.resource_path("Output/{0}second{1}.wav".format(per, i))
+    
