@@ -14,7 +14,6 @@ class WelcomeScreen(QMainWindow):
 
     # 화면 넘어왔을때 호출되는 함수
     def onload(self):
-        self.second.setText(str(self.controller.record_second))
         print("WelcomeSceneLoaded")
 
     def goto_record(self):

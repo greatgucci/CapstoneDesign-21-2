@@ -153,45 +153,41 @@ class VideoView:
     def drawEvent(self):
         cap = cv2.VideoCapture(Path.path_VideoOutput())
         interval = 1/cap.get(cv2.CAP_PROP_FPS)
-        frame_cnt = 0
         face_data_index = 0
         threshold = 20
         highlight = "font: 16pt \"예스 고딕 레귤러\"; background-color:rgba(0, 0, 0, 125); Color : red"
         normal = "font: 16pt \"예스 고딕 레귤러\"; background-color:rgba(0, 0, 0, 125); Color : white"
         text_ui_list = [self.window.video_text0,self.window.video_text1,self.window.video_text2,self.window.video_text3,
                         self.window.video_text4,self.window.video_text5,self.window.video_text6]
+        time_start = time.time()
 
         while cap.isOpened():
-            time_start = time.time()
+            frame_cnt = (time.time() - time_start) / interval
+            cap.set(cv2.CAP_PROP_POS_FRAMES, frame_cnt)
             ret, img = cap.read()
             if ret:
-                frame_cnt += 1
-
-                #draw image
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
                 qt_img = QtGui.QImage(img, img.shape[1], img.shape[0], QtGui.QImage.Format_RGB888)
                 pxm = QPixmap.fromImage(qt_img)
                 self.video.setPixmap(pxm.scaled(self.screen_w, self.screen_h))
                 self.video.update()
 
-                # draw text
-                if (face_data_index < len(self.face_data)) and (frame_cnt >= self.face_data[face_data_index].frame):
+                text_updated = False
+
+                while face_data_index < len(self.face_data) and frame_cnt >= self.face_data[face_data_index].frame:
+                    face_data_index += 1
+                    text_updated = True
+
+                if face_data_index < len(self.face_data) and text_updated:
                     data = self.face_data[face_data_index]
                     self.window.video_text_title.setText("표정")
                     for i in range(len(data.emotion_types)):
                         val = int(data.emotions[i] * 100)
                         text_ui_list[i].setText(data.emotion_types[i] + " : " + str(val) + "%")
-                        if (val >= threshold):
+                        if val >= threshold:
                             text_ui_list[i].setStyleSheet(highlight)
                         else:
                             text_ui_list[i].setStyleSheet(normal)
-
-                    face_data_index += 1
-
-                #wait
-                wait_time = interval - (time.time() - time_start) - self.offset 
-                if wait_time > 0:
-                    time.sleep(wait_time)
             else:
                 cap.release()
                 break
