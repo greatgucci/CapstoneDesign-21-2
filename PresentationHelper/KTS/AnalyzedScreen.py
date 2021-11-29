@@ -35,7 +35,7 @@ class AnalyzedScreen(QMainWindow):
     def onload(self):
         print("AnalyzeSceneLoaded")
         self.print_video_data(self.controller.video_analyze_data)
-        self.print_audio_data(self.controller.sound_analyze_data)
+        self.print_audio_data(self.controller.sound_analyze_data,self.controller.record_second)
         # todo : 영상 분석한 결과 출력
 
     def back_page_visible(self, back_page):
@@ -88,9 +88,7 @@ class AnalyzedScreen(QMainWindow):
 
 
     # 오디오 분석 결과 유저에게 전달하는 함수
-    def print_audio_data(self, sound_data):
-        from RecordScreen import PER, record_seconds
-
+    def print_audio_data(self, sound_data, record_seconds):
         global page, sub_text_temp, sub_text_temp_for_back, page_max
 
         highlight_r = "font: 20pt \"예스 고딕 레귤러\"; Color : red"

@@ -27,7 +27,7 @@ class RewatchScreen(QMainWindow):
         print("RewatchScreen Loaded")
         self.streaming = 0
         self.videoView = VideoView(self, self.controller.video_analyze_data)
-        self.audioView = AudioView(self, self.controller.sound_analyze_data)
+        self.audioView = AudioView(self, self.controller.sound_analyze_data, self.controller.record_second)
 
     def on_stream_end(self):
         if not self.videoView.isPlay and not self.audioView.isPlay:
@@ -37,10 +37,11 @@ class RewatchScreen(QMainWindow):
 #오디오 출력 스레드
 class AudioView:
 
-    def __init__(self, window, audio_data):
+    def __init__(self, window, audio_data, record_seconds):
         from RecordScreen import CHUNK
         self.isPlay = True
         self.window = window
+        self.record_seconds = record_seconds
         #todo : 이거에 set string 하시면 됩니다.
         self.audio_data = audio_data
 
@@ -60,7 +61,7 @@ class AudioView:
         self.viewThread.start()
 
     def play(self):
-        from RecordScreen import  DURATION, PER, record_seconds
+        from RecordScreen import  DURATION, PER
 
         audio_text0 = self.window.audio_text0
         audio_text1 = self.window.audio_text1 
@@ -85,7 +86,7 @@ class AudioView:
             self.window.spm_text_title.setText("빠르기")
 
             # check_time이 DURATION의 배수일 경우
-            if int(check_time) % DURATION == 0 and check_vol_text == False and vol_n != (record_seconds // DURATION):
+            if int(check_time) % DURATION == 0 and check_vol_text == False and vol_n != (self.record_seconds // DURATION):
                 if int(check_time) > 0:
                     vol_text = str((vol_n+1)*DURATION)+'초: '+str(round(self.audio_data[0][vol_n], 1))+'dB\n'
                     audio_text0.setText(vol_text)
@@ -111,7 +112,7 @@ class AudioView:
                         audio_text1.setStyleSheet(highlight_b)
                     elif round(self.audio_data[0][sub_n], 1) > 6.33:
                         audio_text1.setStyleSheet(highlight_r)
-                if sub_n > record_seconds // PER:
+                if sub_n > self.record_seconds // PER:
                     sub_text = self.audio_data[1][-1]
                 else:
                     sub_text = self.audio_data[1][sub_n]
