@@ -15,6 +15,8 @@ from PyQt5.QtWidgets import QMainWindow
 from Path import Path
 from pydub import AudioSegment
 
+import os
+
 ## 오디오 분석 전역 변수
 openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/Recognition"
 accessKey = "62dbdbd8-e605-4035-a608-fb4563c92888"
@@ -155,13 +157,16 @@ class AudioAnalyzer:
             new_audio = AudioSegment.from_wav(Path.path_SoundOuput())
 
             # 원본 wav 파일 나누기
-            if i == repeat - 1:
-                if repeat != self.record_seconds // PER:
-                    new_audio = new_audio[t * i:t * i + (self.record_seconds % PER) * 1000]
+            if repeat != 1:
+                if i == repeat - 1:
+                    if repeat != self.record_seconds // PER:
+                        new_audio = new_audio[t * i:t * i + (self.record_seconds % PER) * 1000]
+                    else:
+                        new_audio = new_audio[t * i:t * i * 2 + 1]
                 else:
-                    new_audio = new_audio[t * i:t * i * 2 + 1]
+                    new_audio = new_audio[t * i:t * (i + 1)]
             else:
-                new_audio = new_audio[t * i:t * (i + 1)]
+                new_audio = new_audio[0:]
 
             # 나눠진 파일 생성
             file_name = Path.path_SoundDistributedFile(PER,i)
@@ -192,6 +197,9 @@ class AudioAnalyzer:
 
             data = json.loads(response.data.decode("utf-8", errors='ignore'))
             subscription.append(data['return_object']['recognized'])
+
+        for i in range(repeat):
+            os.remove("Output/{0}second{1}.wav".format(PER, i))
         
         return subscription
 

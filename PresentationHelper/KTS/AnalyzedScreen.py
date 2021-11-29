@@ -89,6 +89,7 @@ class AnalyzedScreen(QMainWindow):
 
     # 오디오 분석 결과 유저에게 전달하는 함수
     def print_audio_data(self, sound_data, record_seconds):
+
         global page, sub_text_temp, sub_text_temp_for_back, page_max
 
         highlight_r = "font: 20pt \"예스 고딕 레귤러\"; Color : red"
@@ -149,11 +150,18 @@ class AnalyzedScreen(QMainWindow):
         n = 0
         if len(sub_text_temp) % 290 == 0:
             page_max += len(sub_text_temp) // 290 - 1
+            if page_max > 1:
+                sub_text_per_page = sub_text_temp[:290]
+                sub_text_temp = sub_text_temp[290:]
+            else:
+                sub_text_per_page = sub_text_temp
         else:
             page_max += len(sub_text_temp) // 290 
-        if page_max > 1:
-            sub_text_per_page = sub_text_temp[:290]
-            sub_text_temp = sub_text_temp[290:]
+            if page_max > 1:
+                sub_text_per_page = sub_text_temp[:290]
+                sub_text_temp = sub_text_temp[290:]
+            else:
+                sub_text_per_page = sub_text_temp
         # 30은 ui의 width와 매칭되는 글자수
         while True:
             # 첫번째 줄
