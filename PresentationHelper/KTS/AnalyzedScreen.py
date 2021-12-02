@@ -67,7 +67,8 @@ class AnalyzedScreen(QMainWindow):
             text_ui_list[i].setText(FaceData.emotion_types[i] + " : " + str(result[i]) + "%")
             
         threshold = 20 #기준값
-        highlight = "font: 20pt \"예스 고딕 레귤러\"; Color : red"
+        over = "font: 20pt \"예스 고딕 레귤러\"; Color : red"
+        low = "font: 20pt \"예스 고딕 레귤러\"; Color : skyblue"
         normal = "font: 20pt \"예스 고딕 레귤러\"; Color : white"
 
         text_ui_list[0].setStyleSheet(normal)
@@ -76,13 +77,13 @@ class AnalyzedScreen(QMainWindow):
 
         if(result[0] >= threshold):
             self.video_suggestion.setText("헉.. 너무 화나보여요")
-            text_ui_list[0].setStyleSheet(highlight)
+            text_ui_list[0].setStyleSheet(over)
         elif(result[4] >= threshold):
             self.video_suggestion.setText("너무 슬퍼 보여요..")
-            text_ui_list[4].setStyleSheet(highlight)
+            text_ui_list[4].setStyleSheet(over)
         elif(result[3] <= threshold):
             self.video_suggestion.setText("좀 더 웃어 보면 어떨까요?")
-            text_ui_list[3].setStyleSheet(highlight)
+            text_ui_list[3].setStyleSheet(low)
         else:
             self.video_suggestion.setText("훌륭 해요!")
 

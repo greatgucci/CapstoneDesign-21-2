@@ -66,11 +66,12 @@ class VideoAnalyzer:
         face_detection = cv2.CascadeClassifier(Path.path_Haarcascarde())
         emotion_classifier = keras.models.load_model(Path.path_EmotionModel(), False)
         cap = cv2.VideoCapture(Path.path_VideoOutput())
-        
+        end_frame = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
         frame_cnt = 0
 
         while cap.isOpened():
+
             ret, frame = cap.read()
             if ret:
                 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -89,7 +90,10 @@ class VideoAnalyzer:
                     # Emotion predict
                     preds = emotion_classifier.predict(roi)[0]
                     self.face_data_list.append(FaceData(frame_cnt, preds))
-                frame_cnt += 10
+                if frame_cnt+10 >= end_frame:
+                    frame_cnt = end_frame
+                else:
+                    frame_cnt += 10
                 cap.set(cv2.CAP_PROP_POS_FRAMES, frame_cnt)
             else:
                 cap.release()

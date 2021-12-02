@@ -75,7 +75,7 @@ class RecordScreen(QMainWindow):
 class GraphicView:
     screen_w = 1600
     screen_h = 900
-    drawInterval = 1 / 30
+    drawInterval = 1 / 24
     stopped = False
 
     def __init__(self, window):
