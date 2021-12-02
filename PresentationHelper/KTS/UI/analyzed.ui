@@ -118,7 +118,8 @@ color:rgb(255, 255, 255);</string>
      <property name="styleSheet">
       <string notr="true">border-radius:60px;
 background-color:rgb(60, 60, 60);
-font: 12pt &quot;예스 고딕 레귤러&quot;;
+font: 16pt &quot;예스 고딕 레귤러&quot;;
+font-weight:bold;
 color:rgb(255, 255, 255);</string>
      </property>
      <property name="text">
@@ -137,7 +138,8 @@ color:rgb(255, 255, 255);</string>
      <property name="styleSheet">
       <string notr="true">border-radius:60px;
 background-color:rgb(60, 60, 60);
-font: 12pt &quot;예스 고딕 레귤러&quot;;
+font: 16pt &quot;예스 고딕 레귤러&quot;;
+font-weight:bold;
 color:rgb(255, 255, 255);</string>
      </property>
      <property name="text">

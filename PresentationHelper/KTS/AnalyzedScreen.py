@@ -96,7 +96,7 @@ class AnalyzedScreen(QMainWindow):
         highlight_r = "font: 20pt \"예스 고딕 레귤러\"; Color : red"
         highlight_b = "font: 20pt \"예스 고딕 레귤러\"; Color : skyblue"
         normal = "font: 20pt \"예스 고딕 레귤러\"; Color : white"
-        sub_normal = "font: 20pt \"예스 고딕 레귤러\"; Color : white"
+        sub_normal = "font: 19pt \"예스 고딕 레귤러\"; Color : white"
 
         ## 볼륨
         volume_sum = 0.0
@@ -108,11 +108,25 @@ class AnalyzedScreen(QMainWindow):
         self.audio_result0.setStyleSheet(normal)
 
         volume_suggestion = '볼륨: '
-        if volume_avg < 53.9:
+        # 53.9~69까지가 적정 범위
+        # +-5dB
+        if volume_avg <= 43.9:
+            volume_suggestion += '훨씬 더 크게 말하시면 좋겠네요'
+            self.audio_result0.setStyleSheet(highlight_b)
+        elif 43.9 < volume_avg <= 48.9:
             volume_suggestion += '좀 더 크게 말하시면 좋겠네요'
             self.audio_result0.setStyleSheet(highlight_b)
-        elif volume_avg > 69:
+        elif 48.9 < volume_avg < 53.9:
+            volume_suggestion += '약간 더 크게 말하시면 좋겠네요'
+            self.audio_result0.setStyleSheet(highlight_b)
+        elif 69 < volume_avg < 74:
+            volume_suggestion += '약간 더 작게 말하시면 좋겠네요'
+            self.audio_result0.setStyleSheet(highlight_r)
+        elif 74 <= volume_avg < 79:
             volume_suggestion += '좀 더 작게 말하시면 좋겠네요'
+            self.audio_result0.setStyleSheet(highlight_r)
+        elif 79 <= volume_avg:
+            volume_suggestion += '훨씬 더 작게 말하시면 좋겠네요'
             self.audio_result0.setStyleSheet(highlight_r)
         else:
             volume_suggestion += '적당합니다'
@@ -134,11 +148,25 @@ class AnalyzedScreen(QMainWindow):
         self.audio_result1.setStyleSheet(normal)
 
         spm_suggestion = '빠르기: '
-        if spm_avg < 5.33:
+        # 5.33~6.01까지가 적정 범위
+        # +-0.5
+        if spm_avg <= 4.33:
+            spm_suggestion += '훨씬 더 빠르게 말하시면 좋겠네요'
+            self.audio_result1.setStyleSheet(highlight_b)
+        elif 4.33 < spm_avg <= 4.83:
             spm_suggestion += '좀 더 빠르게 말하시면 좋겠네요'
             self.audio_result1.setStyleSheet(highlight_b)
-        elif spm_avg > 6.33:
+        elif 4.83 < spm_avg < 5.33:
+            spm_suggestion += '약간 더 빠르게 말하시면 좋겠네요'
+            self.audio_result1.setStyleSheet(highlight_b)
+        elif 6.01 < spm_avg < 6.51:
+            spm_suggestion += '약간 더 느리게 말하시면 좋겠네요'
+            self.audio_result1.setStyleSheet(highlight_r)
+        elif 6.51 <= spm_avg < 7.01:
             spm_suggestion += '좀 더 느리게 말하시면 좋겠네요'
+            self.audio_result1.setStyleSheet(highlight_r)
+        elif 7.01 <= spm_avg:
+            spm_suggestion += '훨씬 더 느리게 말하시면 좋겠네요'
             self.audio_result1.setStyleSheet(highlight_r)
         else:
             spm_suggestion += '적당합니다'
