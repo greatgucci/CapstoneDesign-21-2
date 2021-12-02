@@ -110,7 +110,7 @@ class AudioView:
                     audio_text1.setStyleSheet(normal)
                     if round(self.audio_data[0][sub_n], 1) < 5.33:
                         audio_text1.setStyleSheet(highlight_b)
-                    elif round(self.audio_data[0][sub_n], 1) > 6.33:
+                    elif round(self.audio_data[0][sub_n], 1) > 6.01:
                         audio_text1.setStyleSheet(highlight_r)
                 if sub_n > self.record_seconds // PER:
                     sub_text = self.audio_data[1][-1]
