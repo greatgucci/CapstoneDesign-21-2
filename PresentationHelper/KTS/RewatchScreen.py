@@ -1,5 +1,6 @@
 import time
 import cv2
+from PyQt5.QtCore import QTimer
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QMainWindow
@@ -16,6 +17,7 @@ from Path import Path
 class RewatchScreen(QMainWindow):
     screen_w = 1600
     screen_h = 900
+    drawInterval = int((1 / 24) * 1000)
 
     def __init__(self, controller):
         super(RewatchScreen, self).__init__()
@@ -26,12 +28,57 @@ class RewatchScreen(QMainWindow):
     def onload(self):
         print("RewatchScreen Loaded")
         self.streaming = 0
-        self.videoView = VideoView(self, self.controller.video_analyze_data)
+        self.videoView = VideoStream()
         self.audioView = AudioView(self, self.controller.sound_analyze_data, self.controller.record_second)
+        self.draw_start()
 
-    def on_stream_end(self):
-        if not self.videoView.isPlay and not self.audioView.isPlay:
+    def draw_start(self):
+        self.face_data = self.controller.video_analyze_data
+        self.face_data_index = 0
+
+        self.start_time = time.time()
+        self.timer = QTimer(self)
+        self.timer.setInterval(self.drawInterval)
+        self.timer.timeout.connect(self.draw_event)
+        self.timer.start()
+
+    def draw_event(self):
+        if self.videoView.isPlay:
+            threshold = 20
+            highlight = "font: 16pt \"예스 고딕 레귤러\"; background-color:rgba(0, 0, 0, 125); Color : red"
+            normal = "font: 16pt \"예스 고딕 레귤러\"; background-color:rgba(0, 0, 0, 125); Color : white"
+            text_ui_list = [self.video_text0, self.video_text1, self.video_text2, self.video_text3,
+                            self.video_text4, self.video_text5, self.video_text6]
+
+            img = cv2.cvtColor(self.videoView.read(), cv2.COLOR_BGR2RGB)
+            qt_img = QtGui.QImage(img, img.shape[1], img.shape[0], QtGui.QImage.Format_RGB888)
+            pxm = QPixmap.fromImage(qt_img)
+            self.video.setPixmap(pxm.scaled(self.screen_w, self.screen_h))
+            self.video.update()
+
+            text_updated = False
+
+            if self.face_data_index < len(self.face_data) and self.videoView.get_frame() >= self.face_data[self.face_data_index].frame:
+                self.face_data_index += 1
+                text_updated = True
+
+            if self.face_data_index < len(self.face_data) and text_updated:
+                data = self.face_data[self.face_data_index]
+                self.video_text_title.setText("표정")
+                for i in range(len(data.emotion_types)):
+                    val = int(data.emotions[i] * 100)
+                    text_ui_list[i].setText(data.emotion_types[i] + " : " + str(val) + "%")
+                    if val >= threshold:
+                        text_ui_list[i].setStyleSheet(highlight)
+                    else:
+                        text_ui_list[i].setStyleSheet(normal)
+
+        if not self.audioView.isPlay and not self.videoView.isPlay:
+            self.timer.disconnect()
+            self.timer.stop()
             self.controller.setScreen(0)
+
+
 
 
 #오디오 출력 스레드
@@ -132,69 +179,31 @@ class AudioView:
         self.stream.close()
         self.p.terminate()
         self.isPlay = False
-        self.window.on_stream_end()
 
         
-
-#영상 출력 스레드
-class VideoView:
-    screen_w = 1600
-    screen_h = 900
-    offset = 0.003
-
-    def __init__(self, window, face_data):
+class VideoStream:
+    def __init__(self):
+        self.camera = cv2.VideoCapture(Path.path_VideoOutput())
+        read, self.img = self.camera.read()
         self.isPlay = True
-        self.window = window
-        self.video = window.video
-        self.face_data = face_data
-        self.viewThread = Thread(target=self.drawEvent, args=())
-        self.viewThread.start()
+        self.camThread = Thread(target=self.record, args=())
+        self.camThread.start()
 
-    def drawEvent(self):
-        cap = cv2.VideoCapture(Path.path_VideoOutput())
-        interval = 1/cap.get(cv2.CAP_PROP_FPS)
-        face_data_index = 0
-        threshold = 20
-        highlight = "font: 16pt \"예스 고딕 레귤러\"; background-color:rgba(0, 0, 0, 125); Color : red"
-        normal = "font: 16pt \"예스 고딕 레귤러\"; background-color:rgba(0, 0, 0, 125); Color : white"
-        text_ui_list = [self.window.video_text0,self.window.video_text1,self.window.video_text2,self.window.video_text3,
-                        self.window.video_text4,self.window.video_text5,self.window.video_text6]
-        time_start = time.time()
-
-        while cap.isOpened():
-            frame_cnt = (time.time() - time_start) / interval
-            cap.set(cv2.CAP_PROP_POS_FRAMES, frame_cnt)
-            ret, img = cap.read()
-            if ret:
-                img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-                qt_img = QtGui.QImage(img, img.shape[1], img.shape[0], QtGui.QImage.Format_RGB888)
-                pxm = QPixmap.fromImage(qt_img)
-                self.video.setPixmap(pxm.scaled(self.screen_w, self.screen_h))
-                self.video.update()
-
-                text_updated = False
-
-                while face_data_index < len(self.face_data) and frame_cnt >= self.face_data[face_data_index].frame:
-                    face_data_index += 1
-                    text_updated = True
-
-                if face_data_index < len(self.face_data) and text_updated:
-                    data = self.face_data[face_data_index]
-                    self.window.video_text_title.setText("표정")
-                    for i in range(len(data.emotion_types)):
-                        val = int(data.emotions[i] * 100)
-                        text_ui_list[i].setText(data.emotion_types[i] + " : " + str(val) + "%")
-                        if val >= threshold:
-                            text_ui_list[i].setStyleSheet(highlight)
-                        else:
-                            text_ui_list[i].setStyleSheet(normal)
+    def record(self):
+        while self.isPlay:
+            read, self.img = self.camera.read()
+            if read:
+                time.sleep(0.03)
             else:
-                cap.release()
-                break
+                self.isPlay = False
+                self.camera.release()
 
-        self.isPlay = False
-        self.window.on_stream_end()
-    
+    def read(self):
+        return self.img
+
+    def get_frame(self):
+        return self.camera.get(cv2.CAP_PROP_POS_FRAMES)
+
 
 
 

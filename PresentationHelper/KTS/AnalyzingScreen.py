@@ -3,6 +3,7 @@ import time
 import cv2
 import keras.models
 import numpy as np
+from PyQt5.QtCore import QTimer
 from PyQt5.uic import loadUi
 from keras.preprocessing.image import img_to_array
 
@@ -41,25 +42,29 @@ class AnalyzingScreen(QMainWindow):
 
     def start_analyze(self):
         #분석 속도 개선을 위해 thread 분리
-        self.audioAnalyzer = AudioAnalyzer(self.controller.record_second)
-        self.videoAnalyzer = VideoAnalyzer()
+        self.audioAnalyzer = AudioAnalyzer(self.controller.record_second,self)
+        self.videoAnalyzer = VideoAnalyzer(self)
+        self.timer = QTimer(self)
+        self.timer.setInterval(1000)
+        self.timer.timeout.connect(self.check_event)
+        self.timer.start()
 
-        while self.audioAnalyzer.isAnalyzing:
-            pass
-        
-        self.controller.video_analyze_data = self.videoAnalyzer.getData()
-        self.controller.sound_analyze_data = self.audioAnalyzer.getData()
-        
-        self.goto_analyzed()
 
-    def goto_analyzed(self):
-        self.controller.setScreen(3)
+    def check_event(self):
+        if not self.audioAnalyzer.isAnalyzing and not self.videoAnalyzer.isAnalyzing:
+            self.controller.video_analyze_data = self.videoAnalyzer.getData()
+            self.controller.sound_analyze_data = self.audioAnalyzer.getData()
+            self.timer.disconnect()
+            self.timer.stop()
+            self.controller.setScreen(3)
 
 class VideoAnalyzer:
-    def __init__(self):
+    def __init__(self, window):
         self.isAnalyzing = True
+        self.window = window
         self.face_data_list = []
-        self.analyze()
+        self.thread = threading.Thread(target=self.analyze, args=())
+        self.thread.start()
 
     def analyze(self):
         print("video analyze start\n")
@@ -113,8 +118,9 @@ class FaceData:
 
 class AudioAnalyzer:
 
-    def __init__(self, record_seconds):
+    def __init__(self, record_seconds, window):
         self.isAnalyzing = True
+        self.window = window
         self.record_seconds = record_seconds
         self.data = []
         self.thread = threading.Thread(target=self.analyzeAudio, args=())
@@ -132,6 +138,7 @@ class AudioAnalyzer:
         self.data.append(self.tempo_analysis())
         print("audio analyze end\n")
         self.isAnalyzing = False
+
 
     ## 녹화된 음성 분석
     def tempo_analysis(self):

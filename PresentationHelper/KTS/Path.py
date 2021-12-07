@@ -21,8 +21,11 @@ class Path:
     def path_AnalyzingScreen():
         return Path.resource_path("UI/analyzing.ui")
     @staticmethod
-    def path_AnalyzedScreen():
-        return Path.resource_path("UI/analyzed.ui")
+    def path_VideoAnalyzedScreen():
+        return Path.resource_path("UI/video_analyzed.ui")
+    @staticmethod
+    def path_AudioAnalyzedScreen():
+        return Path.resource_path("UI/audio_analyzed.ui")
     @staticmethod
     def path_RewatchScreen():
         return Path.resource_path("UI/rewatch.ui")

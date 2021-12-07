@@ -3,11 +3,12 @@ import os
 from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QApplication
 
+from KTS.AudioAnalyzedScreen import AudioAnalyzedScreen
 from RewatchScreen import RewatchScreen
 from WelcomeScreen import WelcomeScreen
 from RecordScreen import RecordScreen
 from AnalyzingScreen import AnalyzingScreen
-from AnalyzedScreen import AnalyzedScreen
+from VideoAnalyzedScreen import VideoAnalyzedScreen
 
 class Controller:
     video_analyze_data = []
@@ -17,7 +18,7 @@ class Controller:
     def __init__(self, mainwidget):
         self.mainWidget = mainwidget
         self.widgetList = [WelcomeScreen(self), RecordScreen(self), AnalyzingScreen(self),
-                           AnalyzedScreen(self), RewatchScreen(self)]
+                           VideoAnalyzedScreen(self), AudioAnalyzedScreen(self), RewatchScreen(self)]
 
         for i in range(len(self.widgetList)):
             mainwidget.addWidget(self.widgetList[i])
@@ -31,12 +32,22 @@ class Controller:
         self.mainWidget.update()
         self.widgetList[index].onload()
 
-
 # main
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'   # tensorflow error 메시지 제외하고 무시
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"  # tensorflow cpu 사용
+sys._excepthook = sys.excepthook
+
+def my_exception_hook(exctype, value, traceback):
+    # Print the error and traceback
+    print(exctype, value, traceback)
+    # Call the normal Exception hook after
+    sys._excepthook(exctype, value, traceback)
+    sys.exit(1)
+
+sys.excepthook = my_exception_hook
 app = QApplication(sys.argv)
 Controller(QStackedWidget())
+
 
 try:
     sys.exit(app.exec())

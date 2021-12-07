@@ -2,6 +2,7 @@ import threading
 import time
 
 import cv2
+from PyQt5.QtCore import QTimer
 
 from PyQt5.QtGui import QPixmap
 from threading import Thread
@@ -37,6 +38,9 @@ PER = 10
 decibels = []
 
 class RecordScreen(QMainWindow):
+    screen_w = 1600
+    screen_h = 900
+    drawInterval = int((1 / 24) * 1000)
 
     def __init__(self, controller):
         super(RecordScreen, self).__init__()
@@ -48,60 +52,35 @@ class RecordScreen(QMainWindow):
         print("RecordSceneLoaded")
         self.video = VideoStream()
         self.audio = AudioStream(self,self.controller.record_second)
-        self.view = GraphicView(self)
 
         self.video.start()
         self.audio.start()
-        self.view.start()
+        self.draw_start()
 
-    #오디오 늑음이 끝나면, 모두 종료
-    def OnAudioRecordEnd(self):
-        self.audio.stop()
-        self.video.stop()
-        self.view.stop()
-        self.controller.setScreen(2)
+    def draw_start(self):
+        self.start_time = time.time()
+        self.timer = QTimer(self)
+        self.timer.setInterval(self.drawInterval)
+        self.timer.timeout.connect(self.draw_event)
+        self.timer.start()
 
-    # 삭제 안됨
-    def goto_analyzing(self):
+    def draw_event(self):
+        img = cv2.cvtColor(self.video.read(), cv2.COLOR_BGR2RGB)
+        qt_img = QtGui.QImage(img, img.shape[1], img.shape[0], QtGui.QImage.Format_RGB888)
+        pxm = QPixmap.fromImage(qt_img)
+        self.graphic.setPixmap(pxm.scaled(self.screen_w, self.screen_h))
+        self.graphic.update()
 
-        self.audio.stop()
-        self.video.stop()
-        self.view.stop()
+        current_time = time.time() - self.start_time
+        self.time.setText("시간 : " + str(int(current_time)))
+        self.time.update()
 
-        self.controller.setScreen(2)
-
-
-#영상 보여주는 스레드가 따로 동작
-class GraphicView:
-    screen_w = 1600
-    screen_h = 900
-    drawInterval = 1 / 24
-    stopped = False
-
-    def __init__(self, window):
-        self.window = window
-        self.currentTime = 0
-
-    def start(self):
-        self.viewThread = Thread(target=self.drawEvent, args=())
-        self.viewThread.start()
-
-    def drawEvent(self):
-        start = time.time()
-        while not self.stopped:
-            img = cv2.cvtColor(self.window.video.read(), cv2.COLOR_BGR2RGB)
-            qt_img = QtGui.QImage(img, img.shape[1], img.shape[0], QtGui.QImage.Format_RGB888)
-            pxm = QPixmap.fromImage(qt_img)
-            self.window.graphic.setPixmap(pxm.scaled(self.screen_w, self.screen_h))
-            self.window.graphic.update()
-
-            self.currentTime = time.time() - start
-            self.window.time.setText("시간 : "+str(int(self.currentTime)))
-            self.window.time.update()
-            time.sleep(self.drawInterval)
-
-    def stop(self):
-        self.stopped = True
+        if self.audio.stopped:
+            self.video.stop()
+            self.audio.stop()
+            self.timer.disconnect()
+            self.timer.stop()
+            self.controller.setScreen(2)
 
 # 음성 녹음을 위한 스레드
 class AudioStream:
@@ -156,15 +135,13 @@ class AudioStream:
             # 삭제 안됨
             i += 1
 
-        #오디오 녹음이 끝나면, 모두 종료
-        self.window.OnAudioRecordEnd()
+        self.stopped = True
 
     def stop(self):
         if self.open == True:
             # 삭제 안됨
-            self.stopped = True
             self.open = False
-            
+
             self.stream.stop_stream()
             self.stream.close()
             self.p.terminate()
@@ -180,11 +157,9 @@ class AudioStream:
 # 영상 촬영, 저장을 위한 스레드가 따로 동작
 class VideoStream:
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    cam_w = 1280
-    cam_h = 720
+    cam_w = 640
+    cam_h = 360
     fps = 30
-    streamStart = False
-    stopped = False
 
     def __init__(self):
         # self.camera = cv2.VideoCapture(0)
@@ -194,6 +169,7 @@ class VideoStream:
         self.camera.set(cv2.CAP_PROP_FPS, self.fps)
         self.out = cv2.VideoWriter('Output/video.mp4', self.fourcc, self.fps, (self.cam_w, self.cam_h))
         read, self.img = self.camera.read()
+        self.stopped = False
 
     def start(self):
         self.camThread = Thread(target=self.record, args=())
@@ -209,6 +185,7 @@ class VideoStream:
 
     def stop(self):
         self.stopped = True
+        self.camThread.join()
         self.camera.release()
         self.out.release()
 

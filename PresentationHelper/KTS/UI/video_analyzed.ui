@@ -30,25 +30,25 @@ background-color: qlineargradient(spread:pad, x1:0.534, y1:0.698727, x2:0.534, y
     <widget class="QLabel" name="title">
      <property name="geometry">
       <rect>
-       <x>680</x>
-       <y>0</y>
-       <width>261</width>
+       <x>620</x>
+       <y>10</y>
+       <width>421</width>
        <height>91</height>
       </rect>
      </property>
      <property name="styleSheet">
       <string notr="true">color:rgb(255, 255, 255);
-font: 36pt &quot;예스 고딕 레귤러&quot;;</string>
+font: 40pt &quot;예스 고딕 레귤러&quot;;</string>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:28pt;&quot;&gt;분석 결과&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:48pt;&quot;&gt;표정 분석 결과&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QLabel" name="video_result_title">
      <property name="geometry">
       <rect>
-       <x>120</x>
-       <y>300</y>
+       <x>180</x>
+       <y>280</y>
        <width>241</width>
        <height>41</height>
       </rect>
@@ -62,48 +62,6 @@ color:rgb(255, 255, 255)</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="add_page">
-     <property name="geometry">
-      <rect>
-       <!-- <x>1541</x>
-       <y>692</y> -->
-       <x>1500</x>
-       <y>690</y>
-       <width>47</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border-radius:60px;
-background-color:rgb(60, 60, 60);
-font: 10pt &quot;예스 고딕 레귤러&quot;;
-color:rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string>다음</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="back_page">
-     <property name="geometry">
-      <rect>
-       <!-- <x>1541</x>
-       <y>692</y> -->
-       <x>1550</x>
-       <y>690</y>
-       <width>47</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">border-radius:60px;
-background-color:rgb(60, 60, 60);
-font: 10pt &quot;예스 고딕 레귤러&quot;;
-color:rgb(255, 255, 255);</string>
-     </property>
-     <property name="text">
-      <string>이전</string>
      </property>
     </widget>
     <widget class="QPushButton" name="to_welcome">
@@ -146,46 +104,12 @@ color:rgb(255, 255, 255);</string>
       <string>다시보기</string>
      </property>
     </widget>
-    <widget class="QLabel" name="title_video">
-     <property name="geometry">
-      <rect>
-       <x>370</x>
-       <y>90</y>
-       <width>141</width>
-       <height>101</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color:rgb(255, 255, 255);
-font: 36pt &quot;예스 고딕 레귤러&quot;;</string>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;표정&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="title_audio">
-     <property name="geometry">
-      <rect>
-       <x>1050</x>
-       <y>100</y>
-       <width>201</width>
-       <height>81</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color:rgb(255, 255, 255);
-font: 28pt &quot;예스 고딕 레귤러&quot;;</string>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:36pt;&quot;&gt;목소리&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="video_suggestion">
      <property name="geometry">
       <rect>
-       <x>170</x>
-       <y>200</y>
-       <width>591</width>
+       <x>180</x>
+       <y>130</y>
+       <width>1301</width>
        <height>91</height>
       </rect>
      </property>
@@ -200,117 +124,11 @@ color:rgb(255, 170, 127);</string>
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QLabel" name="audio_suggestion">
-     <property name="geometry">
-      <rect>
-       <x>890</x>
-       <y>215</y>
-       <width>561</width>
-       <height>114</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">font: 20pt &quot;예스 고딕 레귤러&quot;;
-color:rgb(255, 170, 127);</string>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:20pt; font-weight:600;&quot;&gt;좀 더 웃으시면 좋겠네요!&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="audio_result0">
-     <property name="geometry">
-      <rect>
-       <x>840</x>
-       <y>310</y>
-       <width>300</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">font: 16pt &quot;예스 고딕 레귤러&quot;;
-color:rgb(255, 255, 255)</string>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;오디오 분석 내용&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="audio_result1">
-     <property name="geometry">
-      <rect>
-       <x>840</x>
-       <y>348</y>
-       <width>700</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">font: 16pt &quot;예스 고딕 레귤러&quot;;
-color:rgb(255, 255, 255)</string>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;오디오 분석 내용&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-     </property>
-    </widget>
-    <widget class="QLabel" name="audio_result2">
-     <property name="geometry">
-      <rect>
-       <x>840</x>
-       <y>385</y>
-       <width>655</width>
-       <height>305</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">font: 16pt &quot;예스 고딕 레귤러&quot;;
-color:rgb(255, 255, 255)</string>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;오디오 분석 내용&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-     </property>
-    </widget>
-    <widget class="Line" name="line">
-     <property name="geometry">
-      <rect>
-       <x>800</x>
-       <y>110</y>
-       <width>20</width>
-       <height>631</height>
-      </rect>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-    </widget>
-    <widget class="Line" name="line_2">
-     <property name="geometry">
-      <rect>
-       <x>110</x>
-       <y>170</y>
-       <width>1400</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
     <widget class="Line" name="line_3">
      <property name="geometry">
       <rect>
        <x>110</x>
-       <y>280</y>
+       <y>220</y>
        <width>1400</width>
        <height>16</height>
       </rect>
@@ -323,7 +141,7 @@ color:rgb(255, 255, 255)</string>
      <property name="geometry">
       <rect>
        <x>110</x>
-       <y>100</y>
+       <y>110</y>
        <width>1400</width>
        <height>16</height>
       </rect>
@@ -348,8 +166,8 @@ color:rgb(255, 255, 255)</string>
     <widget class="QLabel" name="video_result0">
      <property name="geometry">
       <rect>
-       <x>160</x>
-       <y>360</y>
+       <x>220</x>
+       <y>340</y>
        <width>211</width>
        <height>31</height>
       </rect>
@@ -368,8 +186,8 @@ color:rgb(255, 255, 255)</string>
     <widget class="QLabel" name="video_result1">
      <property name="geometry">
       <rect>
-       <x>160</x>
-       <y>410</y>
+       <x>220</x>
+       <y>390</y>
        <width>211</width>
        <height>31</height>
       </rect>
@@ -388,8 +206,8 @@ color:rgb(255, 255, 255)</string>
     <widget class="QLabel" name="video_result2">
      <property name="geometry">
       <rect>
-       <x>160</x>
-       <y>460</y>
+       <x>220</x>
+       <y>440</y>
        <width>211</width>
        <height>31</height>
       </rect>
@@ -408,8 +226,8 @@ color:rgb(255, 255, 255)</string>
     <widget class="QLabel" name="video_result3">
      <property name="geometry">
       <rect>
-       <x>160</x>
-       <y>510</y>
+       <x>220</x>
+       <y>490</y>
        <width>211</width>
        <height>31</height>
       </rect>
@@ -428,8 +246,8 @@ color:rgb(255, 255, 255)</string>
     <widget class="QLabel" name="video_result4">
      <property name="geometry">
       <rect>
-       <x>160</x>
-       <y>560</y>
+       <x>220</x>
+       <y>540</y>
        <width>211</width>
        <height>31</height>
       </rect>
@@ -448,8 +266,8 @@ color:rgb(255, 255, 255)</string>
     <widget class="QLabel" name="video_result5">
      <property name="geometry">
       <rect>
-       <x>160</x>
-       <y>610</y>
+       <x>220</x>
+       <y>590</y>
        <width>211</width>
        <height>31</height>
       </rect>
@@ -468,8 +286,8 @@ color:rgb(255, 255, 255)</string>
     <widget class="QLabel" name="video_result6">
      <property name="geometry">
       <rect>
-       <x>160</x>
-       <y>660</y>
+       <x>220</x>
+       <y>640</y>
        <width>211</width>
        <height>31</height>
       </rect>
@@ -485,6 +303,203 @@ color:rgb(255, 255, 255)</string>
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
      </property>
     </widget>
+    <widget class="QProgressBar" name="progressBar0">
+     <property name="geometry">
+      <rect>
+       <x>480</x>
+       <y>350</y>
+       <width>931</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QProgressBar::chunk
+{
+background-color:rgb(255, 0, 127);
+}</string>
+     </property>
+     <property name="value">
+      <number>50</number>
+     </property>
+     <property name="textVisible">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="progressBar1">
+     <property name="geometry">
+      <rect>
+       <x>480</x>
+       <y>400</y>
+       <width>931</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QProgressBar::chunk
+{
+background-color:rgb(170, 170, 0);
+}</string>
+     </property>
+     <property name="value">
+      <number>24</number>
+     </property>
+     <property name="textVisible">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="progressBar2">
+     <property name="geometry">
+      <rect>
+       <x>480</x>
+       <y>450</y>
+       <width>931</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QProgressBar::chunk
+{
+background-color:rgb(170, 170, 255);
+}</string>
+     </property>
+     <property name="value">
+      <number>24</number>
+     </property>
+     <property name="textVisible">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="progressBar3">
+     <property name="geometry">
+      <rect>
+       <x>480</x>
+       <y>500</y>
+       <width>931</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QProgressBar::chunk
+{
+background-color:rgb(255, 255, 127);
+}</string>
+     </property>
+     <property name="value">
+      <number>24</number>
+     </property>
+     <property name="textVisible">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="progressBar4">
+     <property name="geometry">
+      <rect>
+       <x>480</x>
+       <y>550</y>
+       <width>931</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QProgressBar::chunk
+{
+background-color:rgb(0, 85, 255);
+}</string>
+     </property>
+     <property name="value">
+      <number>24</number>
+     </property>
+     <property name="textVisible">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="progressBar5">
+     <property name="geometry">
+      <rect>
+       <x>480</x>
+       <y>600</y>
+       <width>931</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QProgressBar::chunk
+{
+background-color:rgb(255, 170, 0);
+}</string>
+     </property>
+     <property name="value">
+      <number>24</number>
+     </property>
+     <property name="textVisible">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QProgressBar" name="progressBar6">
+     <property name="geometry">
+      <rect>
+       <x>480</x>
+       <y>650</y>
+       <width>931</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QProgressBar::chunk
+{
+background-color:rgb(0, 255, 127);
+}</string>
+     </property>
+     <property name="value">
+      <number>24</number>
+     </property>
+     <property name="textVisible">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="to_audioAnalyzed">
+     <property name="geometry">
+      <rect>
+       <x>1210</x>
+       <y>760</y>
+       <width>141</width>
+       <height>121</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-radius:60px;
+background-color:rgb(60, 60, 60);
+font: 16pt &quot;예스 고딕 레귤러&quot;;
+font-weight:bold;
+color:rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>음성분석</string>
+     </property>
+    </widget>
+    <zorder>progressBar0</zorder>
+    <zorder>title</zorder>
+    <zorder>video_result_title</zorder>
+    <zorder>to_welcome</zorder>
+    <zorder>to_rewatch</zorder>
+    <zorder>video_suggestion</zorder>
+    <zorder>line_3</zorder>
+    <zorder>line_4</zorder>
+    <zorder>line_5</zorder>
+    <zorder>video_result0</zorder>
+    <zorder>video_result1</zorder>
+    <zorder>video_result2</zorder>
+    <zorder>video_result3</zorder>
+    <zorder>video_result4</zorder>
+    <zorder>video_result5</zorder>
+    <zorder>video_result6</zorder>
+    <zorder>progressBar1</zorder>
+    <zorder>progressBar2</zorder>
+    <zorder>progressBar3</zorder>
+    <zorder>progressBar4</zorder>
+    <zorder>progressBar5</zorder>
+    <zorder>progressBar6</zorder>
+    <zorder>to_audioAnalyzed</zorder>
    </widget>
   </widget>
  </widget>
