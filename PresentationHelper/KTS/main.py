@@ -3,7 +3,7 @@ import os
 from PyQt5.QtWidgets import *
 from PyQt5.QtWidgets import QApplication
 
-from KTS.AudioAnalyzedScreen import AudioAnalyzedScreen
+from AudioAnalyzedScreen import AudioAnalyzedScreen
 from RewatchScreen import RewatchScreen
 from WelcomeScreen import WelcomeScreen
 from RecordScreen import RecordScreen

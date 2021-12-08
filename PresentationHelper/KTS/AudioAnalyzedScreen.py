@@ -94,6 +94,7 @@ class AudioAnalyzedScreen(QMainWindow):
                 sub_text_temp += sound_data[1][k]
             else:
                 sub_text_temp += ' ' + sound_data[1][k]
+        
 
         # 1초 단위 평균
         spm_avg = round(len(sub_text_temp) / record_seconds, 2)
@@ -131,36 +132,39 @@ class AudioAnalyzedScreen(QMainWindow):
         sub_text_title = sub_text
         m = 0
         n = 0
-        if len(sub_text_temp) % 250 == 0:
-            page_max += len(sub_text_temp) // 250 - 1
+        # 500은 페이지 기준
+        if len(sub_text_temp) % 500 == 0:
+            page_max += len(sub_text_temp) // 500 - 1
             if page_max > 1:
-                sub_text_per_page = sub_text_temp[:250]
-                sub_text_temp = sub_text_temp[250:]
+                sub_text_per_page = sub_text_temp[:500]
+                sub_text_temp = sub_text_temp[500:]
             else:
                 sub_text_per_page = sub_text_temp
         else:
-            page_max += len(sub_text_temp) // 250
+            page_max += len(sub_text_temp) // 500
             if page_max > 1:
-                sub_text_per_page = sub_text_temp[:250]
-                sub_text_temp = sub_text_temp[250:]
+                sub_text_per_page = sub_text_temp[:500]
+                sub_text_temp = sub_text_temp[500:]
             else:
                 sub_text_per_page = sub_text_temp
-        # 30은 ui의 width와 매칭되는 글자수
+        # 60는 ui의 width와 매칭되는 글자수
         while True:
             # 첫번째 줄
             if m == 0:
-                sub_text += sub_text_per_page[0:30 - len(sub_text_title)] + '\n'
-                n += 30 - len(sub_text_title)
+                sub_text += sub_text_per_page[0:60 - len(sub_text_title)] + '\n'
+                n += 60 - len(sub_text_title)
+                if n == 0:
+                    break
             # 마지막 줄
-            # and len(sub_text_temp) % 30 != 0
-            if m == len(sub_text_per_page) // 30:
-                # len(sub_text_temp) - len(sub_text_temp) % 30
+            # and len(sub_text_temp) % 60 != 0
+            if m == len(sub_text_per_page) // 60:
+                # len(sub_text_temp) - len(sub_text_temp) % 60
                 sub_text += sub_text_per_page[n:len(sub_text_per_page)]
                 break
             # 그 외
             else:
-                sub_text += sub_text_per_page[n:n + 30] + '\n'
-                n += 30
+                sub_text += sub_text_per_page[n:n + 60] + '\n'
+                n += 60
             m += 1
         sub_text_temp_for_back.append(sub_text)
 
