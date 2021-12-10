@@ -157,8 +157,8 @@ class AudioStream:
 # 영상 촬영, 저장을 위한 스레드가 따로 동작
 class VideoStream:
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    cam_w = 640
-    cam_h = 360
+    cam_w = 1280
+    cam_h = 720
     fps = 30
 
     def __init__(self):
