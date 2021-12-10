@@ -133,31 +133,34 @@ class AudioView:
             self.window.spm_text_title.setText("빠르기")
 
             # check_time이 DURATION의 배수일 경우
-            if int(check_time) % DURATION == 0 and check_vol_text == False and vol_n != (self.record_seconds // DURATION):
+            if int(check_time) % DURATION == 0 and check_vol_text == False:
                 if int(check_time) > 0:
-                    vol_text = str((vol_n+1)*DURATION)+'초: '+str(round(self.audio_data[0][vol_n], 1))+'dB\n'
-                    audio_text0.setText(vol_text)
-                    if round(self.audio_data[0][vol_n], 1) < 53.9:
-                        audio_text0.setStyleSheet(highlight_b)
-                    elif round(self.audio_data[0][vol_n], 1) > 69.0:
-                        audio_text0.setStyleSheet(highlight_r)
+                    if vol_n < (self.record_seconds // DURATION):
+                        vol_text = str((vol_n+1)*DURATION)+'초: '+str(round(self.audio_data[0][vol_n], 1))+'dB\n'
+                        audio_text0.setText(vol_text)
+                        if round(self.audio_data[0][vol_n], 1) < 53.9:
+                            audio_text0.setStyleSheet(highlight_b)
+                        elif round(self.audio_data[0][vol_n], 1) > 69.0:
+                            audio_text0.setStyleSheet(highlight_r)
+                        else:
+                            audio_text0.setStyleSheet(normal)
+                        check_vol_text = True
+                        vol_n += 1
                     else:
-                        audio_text0.setStyleSheet(normal)
-                    check_vol_text = True
-                    vol_n += 1
+                        pass
             # check_time이 DURATION의 배수가 아닐 경우
             if check_time > (vol_n+1)*DURATION:
                 check_vol_text = False
 
             # check_time이 PER의 배수일 경우
             if int(check_time) % PER == 0 and check_sub_text == False:
-                if check_time > 0:
+                if int(check_time) > 0:
                     tempo_text = str((sub_n)*PER)+'초: '+str(round(self.audio_data[2][sub_n-1], 2))+'\n'
                     audio_text1.setText(tempo_text)
                     audio_text1.setStyleSheet(normal)
-                    if round(self.audio_data[0][sub_n], 1) < 5.33:
+                    if round(self.audio_data[2][sub_n-1], 1) < 5.33:
                         audio_text1.setStyleSheet(highlight_b)
-                    elif round(self.audio_data[0][sub_n], 1) > 6.01:
+                    elif round(self.audio_data[2][sub_n-1], 1) > 6.01:
                         audio_text1.setStyleSheet(highlight_r)
                 if sub_n > self.record_seconds // PER:
                     sub_text = self.audio_data[1][-1]
